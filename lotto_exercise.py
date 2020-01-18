@@ -19,7 +19,6 @@ def start_the_lottery():
     if option == 5:
         double_automatic_lotto()
 
-
 def lotto_columns():
     columns =  int(input(">>> Welcome to Arik's lottery! <<<\n\nEach lottery column costs 3 ILS.\nHow many columns "
                          "would you like to purchases?: "))
@@ -53,7 +52,6 @@ def generate_column():
     print("\n*** LOTTERY WINNING NUMBERS: " + str(gen) + " ***")
     return gen
 
-
 def enter_manual_numbers(a):
     list2 = []
     for i in range(a):
@@ -68,7 +66,6 @@ def enter_manual_numbers(a):
     print("Manual lottery columns: " + str(list2))
     return list2
 
-
 def enter_automatic_numbers(a):
     automatic_list = []
     for i in range(a):
@@ -82,7 +79,6 @@ def enter_automatic_numbers(a):
     print("Generated " + str(a) + " column(s): " + str(automatic_list))
     return automatic_list
 
-
 def manual_lotto():
     a=lotto_columns()
     decision()
@@ -90,13 +86,11 @@ def manual_lotto():
     c=generate_column()
     win_loss_calc(a, b, c)
 
-
 def double_manual_lotto():
     a=lotto_columns_double()
     b=enter_manual_numbers(a)
     c=generate_column()
     win_loss_calc_double(a, b, c)
-
 
 def automatic_lotto():
     a=lotto_columns()
@@ -105,14 +99,12 @@ def automatic_lotto():
     c=generate_column()
     win_loss_calc(a, b, c)
 
-
 def double_automatic_lotto():
     a=lotto_columns_double()
     decision()
     b=enter_automatic_numbers(a)
     c=generate_column()
     win_loss_calc_double(a, b, c)
-
 
 def win_loss_calc(a, b, c):
     prize = 0
@@ -149,7 +141,6 @@ def win_loss_calc(a, b, c):
     else:
         print(Fore.RED + "<<< You overspend " + str(a * 3 - prize) + " ILS (" + str(prize - a * 3) + ") >>>")
 
-
 def win_loss_calc_double(a, b, c):
     prize = 0
     for z in range(a):
@@ -185,14 +176,12 @@ def win_loss_calc_double(a, b, c):
     else:
         print(Fore.RED + "<<< You overspend " + str(a * 6 - prize) + " ILS (" + str(prize - a * 6) + ") >>>")
 
-
 def check_prizes():
     print("\nThe Original Lotto Prizes:\n" + str("-"*26) + "\n- 1-3 match's wins 0 ILS\n- 4 match's wins 250 ILS\n- 5 match's wins 500 ILS\n" + Fore.LIGHTBLUE_EX + "- 6 match's wins 1000000 "
               "ILS (jackpot)")
     print("\nThe Double Lotto Prizes:\n" + str(
         "-" * 26) + "\n- 1-3 match's wins 0 ILS\n- 4 match's wins 500 ILS\n- 5 match's wins 1000 ILS\n" + Fore.LIGHTBLUE_EX + "- 6 match's wins 2000000 "
                     "ILS (jackpot)")
-
 
 
 start_the_lottery()
