@@ -1,37 +1,48 @@
 import random
+from colorama import Fore, init
+init(autoreset=True)
+
 
 def start_the_lottery():
-    option =  int(input("Please choose one of the following options:\n1 - Manual lotto\n2 - Automatic lotto"
-                        "\n3 - Check win\n4 - Manual double lotto\n5 - Automatic double lotto\n\nEnter you choice: "))
+    option =  int(input("Please choose one of the following options:\n1 - Check Prizes\n2 - Manual Lotto"
+                        "\n3 - Manual Double Lotto\n4 - Automatic Lotto\n5 - Automatic Double Lotto\n\nEnter you choice: "))
     while option == 0 or option > 5:
-        option = int(input("Option " + str(option) + " is invalid. Please choose between option 1 to 5: "))
+        option = int(input("Option " + str(option) + " is invalid. Please choose option 1 to 5: "))
     if option == 1:
-        manual_lotto()
+        check_prizes()
     if option == 2:
-        automatic_lotto()
+        manual_lotto()
     if option == 3:
-        print("WHAT?")
-    if option == 4:
         double_manual_lotto()
+    if option == 4:
+        automatic_lotto()
     if option == 5:
         double_automatic_lotto()
 
+
 def lotto_columns():
-    columns =  int(input(">>> Welcome to Arik's lottery! <<<\nEach lottery column costs 30 ILS.\nHow many columns would"
-                         " you like to purchases?: "))
-    print(str(columns) + " columns will cost you " + str(columns*30) + " ILS.\n")
+    columns =  int(input(">>> Welcome to Arik's lottery! <<<\n\nEach lottery column costs 3 ILS.\nHow many columns "
+                         "would you like to purchases?: "))
+    print(str(columns) + " columns will cost you " + str(columns * 3) + " ILS.\n")
+    return columns
+
+def lotto_columns_double():
+    columns =  int(input(">>> Welcome to Arik's double lottery! <<<\n\nEach lottery column costs 6 ILS.\nHow many "
+                         "columns would you like to purchases?: "))
+    print(str(columns) + " columns will cost you " + str(columns * 6) + " ILS.\n")
+    return columns
+
+def decision():
     decision = input("Press (Y) to continue or (N) to withdrew: ")
     while decision != ("y", "Y") and decision != ("n", "N"):
         if decision == "N" or decision == "n":
             print("You have chosen to withdrew. Kindly join us another time. Farewell.\n")
             quit()
         if decision == "Y" or decision == "y":
-            print("You have chosen to continue. May the luck shines upon you.\n")
+            print("You have chosen to continue. May luck be in your favor!\n")
             break
         else:
             decision = input("("+ str(decision) + ")" + " is not a valid option. Please choose (Y) or (N): ")
-    return columns
-
 
 def generate_column():
     gen = []
@@ -39,6 +50,7 @@ def generate_column():
         x = (random.randint(1, 37))
         if x not in gen:
             gen.append(x)
+    print("\n*** LOTTERY WINNING NUMBERS: " + str(gen) + " ***")
     return gen
 
 
@@ -66,7 +78,6 @@ def enter_automatic_numbers(a):
                 x = (random.randint(1, 37))
                 if x not in gen:
                     gen.append(x)
-        # print("Generated the numbers " + str(gen) + " for column " + str(i + 1))
         automatic_list.append(gen)
     print("Generated " + str(a) + " column(s): " + str(automatic_list))
     return automatic_list
@@ -74,81 +85,37 @@ def enter_automatic_numbers(a):
 
 def manual_lotto():
     a=lotto_columns()
+    decision()
     b=enter_manual_numbers(a)
     c=generate_column()
-    print("\n***** WINNING NUMBERS ***** \n" + str(c) + "\n")
-    for z in range(a):
-        loss_counter = 0
-        win_counter = 0
-        for y in range(6):
-            if b[z][y] not in c:
-                loss_counter = loss_counter + 1
-            else:
-                win_counter = win_counter + 1
-
-        if win_counter == 0:
-            print("Column " + str(z + 1) + " > LOST <: no match's found in lotto column " + str(
-                z + 1) + ". Better luck next time")
-        else:
-            print("Column " + str(z + 1) + " > WIN <: " + str(win_counter) + " match(s) found in lotto column " + str(
-                z + 1) + " You won {} ILS".format(10 ** win_counter))
+    win_loss_calc(a, b, c)
 
 
 def double_manual_lotto():
-    a=lotto_columns()
+    a=lotto_columns_double()
     b=enter_manual_numbers(a)
     c=generate_column()
-    print("\n***** WINNING NUMBERS ***** \n" + str(c) + "\n")
-    for z in range(a):
-        loss_counter = 0
-        win_counter = 0
-        for y in range(6):
-            if b[z][y] not in c:
-                loss_counter = loss_counter + 1
-            else:
-                win_counter = win_counter + 1
-
-        if win_counter == 0:
-            print("Column " + str(z + 1) + " > LOST <: no match's found in lotto column " + str(
-                z + 1) + ". Better luck next time")
-        else:
-            print("Column " + str(z + 1) + " > WIN <: " + str(win_counter) + " match(s) found in lotto column " + str(
-                z + 1) + " You won {} ILS".format(10 ** win_counter *2))
+    win_loss_calc_double(a, b, c)
 
 
 def automatic_lotto():
     a=lotto_columns()
+    decision()
     b=enter_automatic_numbers(a)
     c=generate_column()
-    prize=0
-    print("\n***** WINNING NUMBERS ***** \n" + str(c) + "\n")
-    for z in range(a):
-        loss_counter = 0
-        win_counter = 0
-        for y in range(6):
-            if b[z][y] not in c:
-                loss_counter = loss_counter + 1
-            else:
-                win_counter = win_counter + 1
-        if win_counter < 4:
-            pass
-        else:
-            print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(z + 1) + " - you won >>>  {} ILS  <<<".format(10 ** win_counter))
-            prize = prize + 10 ** win_counter
-    print("\nYou spend " + str(a*30) + " ILS")
-    print("You won " + str(prize) + " ILS")
-    if int(prize) > int(a*30):
-        print("You now have extra " + str(prize - a*30) + " ILS")
-    else:
-        print("[ You owns Arik Rozenman " + str(a * 30 - prize) + " ILS ]")
+    win_loss_calc(a, b, c)
 
 
 def double_automatic_lotto():
-    a=lotto_columns()
+    a=lotto_columns_double()
+    decision()
     b=enter_automatic_numbers(a)
     c=generate_column()
-    prize=0
-    print("\n***** WINNING NUMBERS ***** \n" + str(c) + "\n")
+    win_loss_calc_double(a, b, c)
+
+
+def win_loss_calc(a, b, c):
+    prize = 0
     for z in range(a):
         loss_counter = 0
         win_counter = 0
@@ -157,18 +124,75 @@ def double_automatic_lotto():
                 loss_counter = loss_counter + 1
             else:
                 win_counter = win_counter + 1
-        if win_counter < 4:
+        if win_counter < 3:
             pass
-            # print("Column " + str(z + 1) + ": (LOST) - " + str(win_counter) + " match(s) found in column " + str(z + 1) + " - no win")
-        else:
-            print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(z + 1) + " - you won >>>  {} ILS  <<<".format(10 ** win_counter * 2))
-            prize = prize + 10 ** win_counter * 2
-    print("\nYou spend " + str(a*30) + " ILS")
+        if win_counter == 3:
+            print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
+                z + 1) + " " + str(b[z]) + " - you won >>>  {} ILS  <<<".format(10))
+            prize = prize + 10
+        if win_counter == 4:
+            print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
+                z + 1) + " " + str(b[z]) + " - you won >>> {} ILS <<<".format(250))
+            prize = prize + 250
+        if win_counter == 5:
+            print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
+                z + 1) + " " + str(b[z]) + " - you won >>> {} ILS <<<".format(500))
+            prize = prize + 500
+        if win_counter == 6:
+            print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
+                z + 1) + " " + str(b[z]) + " - you won >>> {} ILS <<<".format(1000000))
+            prize = prize + 1000000
+    print("\nYou wasted " + str(a * 3) + " ILS")
     print("You won " + str(prize) + " ILS")
-    if int(prize) > int(a*30):
-        print("You now have extra " + str(prize - a*30) + " ILS")
+    if int(prize) > int(a * 3):
+        print(Fore.BLUE + "<<< You gained " + str(prize - a * 3) + " ILS >>>")
     else:
-        print("[ You owns Arik Rozenman " + str(a * 30 - prize) + " ILS ]")
+        print(Fore.RED + "<<< You overspend " + str(a * 3 - prize) + " ILS (" + str(prize - a * 3) + ") >>>")
+
+
+def win_loss_calc_double(a, b, c):
+    prize = 0
+    for z in range(a):
+        loss_counter = 0
+        win_counter = 0
+        for y in range(6):
+            if b[z][y] not in c:
+                loss_counter = loss_counter + 1
+            else:
+                win_counter = win_counter + 1
+        if win_counter < 3:
+            pass
+        if win_counter == 3:
+            print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
+                z + 1) + " " + str(b[z]) + " - you won >>>  {} ILS  <<<".format(20))
+            prize = prize + 20
+        if win_counter == 4:
+            print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
+                z + 1) + " " + str(b[z]) + " - you won >>> {} ILS <<<".format(500))
+            prize = prize + 500
+        if win_counter == 5:
+            print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
+                z + 1) + " " + str(b[z]) + " - you won >>> {} ILS <<<".format(1000))
+            prize = prize + 1000
+        if win_counter == 6:
+            print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
+                z + 1) + " " + str(b[z]) + " - you won >>> {} ILS <<<".format(2000000))
+            prize = prize + 2000000
+    print("\nYou spent " + str(a * 6) + " ILS")
+    print("You won " + str(prize) + " ILS")
+    if int(prize) > int(a * 6):
+        print(Fore.BLUE + "<<< You gained " + str(prize - a * 6) + " ILS >>>")
+    else:
+        print(Fore.RED + "<<< You overspend " + str(a * 6 - prize) + " ILS (" + str(prize - a * 6) + ") >>>")
+
+
+def check_prizes():
+    print("\nThe Original Lotto Prizes:\n" + str("-"*26) + "\n- 1-3 match's wins 0 ILS\n- 4 match's wins 250 ILS\n- 5 match's wins 500 ILS\n" + Fore.LIGHTBLUE_EX + "- 6 match's wins 1000000 "
+              "ILS (jackpot)")
+    print("\nThe Double Lotto Prizes:\n" + str(
+        "-" * 26) + "\n- 1-3 match's wins 0 ILS\n- 4 match's wins 500 ILS\n- 5 match's wins 1000 ILS\n" + Fore.LIGHTBLUE_EX + "- 6 match's wins 2000000 "
+                    "ILS (jackpot)")
+
 
 
 start_the_lottery()
