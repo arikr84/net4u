@@ -2,7 +2,6 @@ from time import sleep
 import re
 import ipaddress
 from colorama import Fore, init
-
 init(autoreset=True)
 
 
@@ -34,13 +33,11 @@ def dns_configuration():
     if option == 5:
         search_dns()
 
-
 def original_dns_records():
     original_records = {"google.com": "1.1.1.1", "amazon.com": "2.2.2.2", "ynet.co.il": "3.3.3.3",
                         "facebook.com": "4.4.4.4",
                         "aliexpress.com": "5.5.5.5"}
     return original_records
-
 
 def add_dns():
     url = input(Fore.LIGHTBLUE_EX + "\nEnter URL to add: ")
@@ -66,7 +63,6 @@ def add_dns():
                 original_records.update({url: ip})
             sleep_before_list()
             dns_list(original_records)
-
 
 def delete_dns():
     original_records = original_dns_records()
@@ -123,5 +119,6 @@ def sleep_before_list():
 
 def quit_error():
     quit(1)
+
 
 dns_configuration()
