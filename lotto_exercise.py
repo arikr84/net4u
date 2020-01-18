@@ -4,10 +4,10 @@ init(autoreset=True)
 
 
 def start_the_lottery():
-    option =  int(input("Please choose one of the following options:\n1 - Check Prizes\n2 - Manual Lotto"
+    option =  int(input("Select one of the following options:\n1 - Check Prizes\n2 - Manual Lotto"
                         "\n3 - Manual Double Lotto\n4 - Automatic Lotto\n5 - Automatic Double Lotto\n\nEnter you choice: "))
     while option == 0 or option > 5:
-        option = int(input("Option " + str(option) + " is invalid. Please choose option 1 to 5: "))
+        option = int(input("Option " + str(option) + " is invalid. Choose option 1 to 5: "))
     if option == 1:
         check_prizes()
     if option == 2:
@@ -41,7 +41,7 @@ def decision():
             print("You have chosen to continue. May luck be in your favor!\n")
             break
         else:
-            decision = input("("+ str(decision) + ")" + " is not a valid option. Please choose (Y) or (N): ")
+            decision = input("("+ str(decision) + ")" + " is not a valid option. Choose (Y) or (N): ")
 
 def generate_column():
     gen = []
