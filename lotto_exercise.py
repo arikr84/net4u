@@ -108,6 +108,10 @@ def double_automatic_lotto():
 
 def win_loss_calc(a, b, c):
     prize = 0
+    three_matches = 0
+    four_matches = 0
+    five_matches = 0
+    six_matches = 0
     for z in range(a):
         loss_counter = 0
         win_counter = 0
@@ -119,27 +123,34 @@ def win_loss_calc(a, b, c):
         if win_counter < 3:
             pass
         if win_counter == 3:
-            print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
-                z + 1) + " " + str(b[z]) + " - you won >>>  {} ILS  <<<".format(10))
+            # print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
+            #     z + 1) + " " + str(b[z]) + " - you won >>>  {} ILS  <<<".format(10))
             prize = prize + 10
+            three_matches = three_matches + 1
         if win_counter == 4:
-            print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
-                z + 1) + " " + str(b[z]) + " - you won >>> {} ILS <<<".format(250))
+            # print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
+            #     z + 1) + " " + str(b[z]) + " - you won >>> {} ILS <<<".format(250))
             prize = prize + 250
+            four_matches = four_matches + 1
         if win_counter == 5:
-            print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
-                z + 1) + " " + str(b[z]) + " - you won >>> {} ILS <<<".format(500))
+            # print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
+            #     z + 1) + " " + str(b[z]) + " - you won >>> {} ILS <<<".format(500))
             prize = prize + 500
+            five_matches = five_matches + 1
         if win_counter == 6:
-            print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
-                z + 1) + " " + str(b[z]) + " - you won >>> {} ILS <<<".format(1000000))
+            # print("Column " + str(z + 1) + ": (WIN) - " + str(win_counter) + " match(s) found in column " + str(
+            #     z + 1) + " " + str(b[z]) + " - you won >>> {} ILS <<<".format(1000000))
             prize = prize + 1000000
+            six_matches = six_matches + 1
+    print("\nYou won the 3rd prize (10 ILS) " + str(three_matches) + " times\nYou won the 4th prize (250 ILS) "
+          + str(four_matches) +" times\nYou won the 5th prize (500 ILS) " + str(five_matches) +
+          " times\nYou won the 6th prize (1000000 ILS) " + str(six_matches) + " times")
     print("\nYou wasted " + str(a * 3) + " ILS")
     print("You won " + str(prize) + " ILS")
     if int(prize) > int(a * 3):
         print(Fore.BLUE + "<<< You gained " + str(prize - a * 3) + " ILS >>>")
     else:
-        print(Fore.RED + "<<< You overspend " + str(a * 3 - prize) + " ILS (" + str(prize - a * 3) + ") >>>")
+        print(Fore.RED + "<<< You overspend " + str(a * 3 - prize) + " ILS (" + str(prize - a * 3) + " ILS) >>>")
 
 def win_loss_calc_double(a, b, c):
     prize = 0
