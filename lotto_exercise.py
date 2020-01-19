@@ -4,8 +4,8 @@ init(autoreset=True)
 
 
 def start_the_lottery():
-    option =  int(input("Select one of the following options:\n1 - Check Prizes\n2 - Manual Lotto"
-                        "\n3 - Manual Double Lotto\n4 - Automatic Lotto\n5 - Automatic Double Lotto\n\nEnter you choice: "))
+    option =  int(input(Fore.BLUE + "<<< The Big Lottery Game Version 1.0 >>>\n\n" + Fore.BLACK + "Select one of the following options:\n\n" + Fore.LIGHTBLACK_EX + "- Enter (1) to check the prizes\n- Enter (2) to run the manual lottery"
+                        "\n- Enter (3) to run the manual double lottery\n- Enter (4) to run the automatic lottery\n- Enter (5) to run the automatic double lottery\n\n" + Fore.BLACK + "Enter you choice: "))
     while option == 0 or option > 5:
         option = int(input("Option " + str(option) + " is invalid. Choose option 1 to 5: "))
     if option == 1:
@@ -20,19 +20,19 @@ def start_the_lottery():
         double_automatic_lotto()
 
 def lotto_columns():
-    columns =  int(input(">>> Welcome to Arik's lottery! <<<\n\nEach lottery column costs 3 ILS.\nHow many columns "
+    columns =  int(input("\nEach lottery column costs 3 ILS.\nHow many columns "
                          "would you like to purchases?: "))
-    print(str(columns) + " columns will cost you " + str(columns * 3) + " ILS.\n")
+    print(str(columns) + " columns will cost you " + Fore.MAGENTA + str(columns * 3) + " ILS.\n")
     return columns
 
 def lotto_columns_double():
-    columns =  int(input(">>> Welcome to Arik's double lottery! <<<\n\nEach lottery column costs 6 ILS.\nHow many "
+    columns =  int(input("\nEach lottery column costs 6 ILS.\nHow many "
                          "columns would you like to purchases?: "))
-    print(str(columns) + " columns will cost you " + str(columns * 6) + " ILS.\n")
+    print(str(columns) + " columns will cost you " + Fore.MAGENTA + str(columns * 6) + " ILS.\n")
     return columns
 
 def decision():
-    decision = input("Press (Y) to continue or (N) to withdrew: ")
+    decision = input("Enter (Y) to continue or (N) to withdrew: ")
     while decision != ("y", "Y") and decision != ("n", "N"):
         if decision == "N" or decision == "n":
             print("You have chosen to withdrew. Kindly join us another time. Farewell.\n")
@@ -172,7 +172,7 @@ def win_loss_calc_double(a, b, c):
     print("\nYou spent " + str(a * 6) + " ILS")
     print("You won " + str(prize) + " ILS")
     if int(prize) > int(a * 6):
-        print(Fore.BLUE + "<<< You gained " + str(prize - a * 6) + " ILS >>>")
+        print(Fore.BLUE + "<<< You won " + str(prize - a * 6) + " ILS >>>")
     else:
         print(Fore.RED + "<<< You overspend " + str(a * 6 - prize) + " ILS (" + str(prize - a * 6) + ") >>>")
 
