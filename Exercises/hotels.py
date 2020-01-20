@@ -142,36 +142,68 @@ def reservation():
     if guests > max_guests:
         quit("Both Fattal and Isrotel hotels can host maximum of " + str(max_guests) +
              " guests while you have requested to host " + str(guests) + " guests")
+    day = input(Style.BRIGHT + "Select your vacation day from the following days:"
+                               " ['sunday', 'monday', 'tuesday', 'wednesday']: ").lower()
     if guests < max_guests:
         for line in open(str(temp_directory) + "/fattal.txt", "r").readlines():
             fattal = line.replace("'", "\"")
             fattal = json.loads(fattal)
-            if len(list(fattal.values())[5]) > 0:
+            if day in (list(fattal.values())[5]):
                 print("- Room " + str(list(fattal.values())[1]) + " in " + Fore.GREEN + Style.BRIGHT +
-                      str(list(fattal.values())[0]) + Fore.BLACK + Style.NORMAL + " hotel can hosts " +
-                      str(list(fattal.values())[2]) + " guests and is available in the following " +
-                      str(len(list(fattal.values())[5])) + " days of the first week of August: " +
-                      str(list(fattal.values())[5]))
+                      str(list(fattal.values())[0]) + Fore.BLACK + Style.NORMAL + " hotel can host " +
+                      str(list(fattal.values())[2]) + " guests and is available on " +
+                      Fore.MAGENTA + str(day).capitalize())
             else:
-                print(Fore.RED + "- Room " + str(list(fattal.values())[1]) + " in " + str(list(fattal.values())[0]) +
-                      " hotel is already taken")
+                print(Fore.RED + "- Room " + str(list(fattal.values())[1]) + " is not available on " +
+                      str(day).capitalize())
+
         for line in open(str(temp_directory) + "/isrotel.txt", "r").readlines():
             isrotel = line.replace("'", "\"")
             isrotel = json.loads(isrotel)
-            if len(list(isrotel.values())[5]) > 0:
+            if day in (list(isrotel.values())[5]):
                 print("- Room " + str(list(isrotel.values())[1]) + " in " + Fore.BLUE + Style.BRIGHT +
-                      str(list(isrotel.values())[0]) + Fore.BLACK + Style.NORMAL + " hotel can hosts " +
-                      str(list(isrotel.values())[2]) + " guests and is available in the following " +
-                      str(len(list(isrotel.values())[5])) + " days of the first week of August: " +
-                      str(list(isrotel.values())[5]))
+                      str(list(isrotel.values())[0]) + Fore.BLACK + Style.NORMAL + " hotel can host " +
+                      str(list(isrotel.values())[2]) + " guests and is available on " +
+                      Fore.MAGENTA + str(day).capitalize())
             else:
-                print(Fore.RED + "- Room " + str(list(isrotel.values())[1]) + " in " + str(list(isrotel.values())[0]) +
-                      " hotel is already taken")
-                quit()
+                print(Fore.RED + "- Room " + str(list(isrotel.values())[1]) + " is not available on " +
+                      str(day).capitalize())
 
-    print(Fore.MAGENTA + Style.BRIGHT +"\nReservation for " + str(guests) + " guest(s) accepted")
-    rooms = guests/2
-    print(rooms)
+
+
+
+
+
+
+
+
+
+    #         if len(list(fattal.values())[5]) > 0:
+    #             print("- Room " + str(list(fattal.values())[1]) + " in " + Fore.GREEN + Style.BRIGHT +
+    #                   str(list(fattal.values())[0]) + Fore.BLACK + Style.NORMAL + " hotel can host " +
+    #                   str(list(fattal.values())[2]) + " guests and is available in the following " +
+    #                   str(len(list(fattal.values())[5])) + " days of the first week of August: " +
+    #                   str(list(fattal.values())[5]))
+    #         else:
+    #             print(Fore.RED + "- Room " + str(list(fattal.values())[1]) + " in " + str(list(fattal.values())[0]) +
+    #                   " hotel is already taken")
+    #     for line in open(str(temp_directory) + "/isrotel.txt", "r").readlines():
+    #         isrotel = line.replace("'", "\"")
+    #         isrotel = json.loads(isrotel)
+    #         if len(list(isrotel.values())[5]) > 0:
+    #             print("- Room " + str(list(isrotel.values())[1]) + " in " + Fore.BLUE + Style.BRIGHT +
+    #                   str(list(isrotel.values())[0]) + Fore.BLACK + Style.NORMAL + " hotel can host " +
+    #                   str(list(isrotel.values())[2]) + " guests and is available in the following " +
+    #                   str(len(list(isrotel.values())[5])) + " days of the first week of August: " +
+    #                   str(list(isrotel.values())[5]))
+    #         else:
+    #             print(Fore.RED + "- Room " + str(list(isrotel.values())[1]) + " in " + str(list(isrotel.values())[0]) +
+    #                   " hotel is already taken")
+    #             quit()
+    #
+    # print(Fore.MAGENTA + Style.BRIGHT +"\nReservation for " + str(guests) + " guest(s) accepted")
+    # rooms = guests/2
+    # print(rooms)
 
 
 
