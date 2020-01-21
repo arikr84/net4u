@@ -53,23 +53,23 @@ def menu():
 def files_creation():
     temp_directory = tempfile.gettempdir()
     fattal = open(str(temp_directory) + "/fattal.txt", "w+")
-    fattal.write("{} {} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 1,", "'guests': 2,", "'breakfast': ['no', 'yes'],", "'cost': ['200$', '280$'],","'day': ['sunday', 'monday', 'tuesday', 'wednesday']}"))
+    fattal.write("{} {} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 1,", "'guests': 2,", "'breakfast': ['no', 'yes'],", "'cost': ['200', '280'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
     fattal = open(str(temp_directory) + "/fattal.txt", "a+")
-    fattal.write("\n{} {} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 2,", "'guests': 2,", "'breakfast': ['no', 'yes'],", "'cost': ['200$', '280$'],","'day': ['sunday', 'monday', 'tuesday', 'wednesday']}"))
+    fattal.write("\n{} {} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 2,", "'guests': 2,", "'breakfast': ['no', 'yes'],", "'cost': ['200', '280'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
     fattal = open(str(temp_directory) + "/fattal.txt", "a+")
-    fattal.write("\n{} {} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 3,", "'guests': 3,", "'breakfast': ['no', 'yes'],", "'cost': ['400$', '500$'],","'day': ['sunday', 'monday', 'tuesday', 'wednesday']}"))
+    fattal.write("\n{} {} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 3,", "'guests': 3,", "'breakfast': ['no', 'yes'],", "'cost': ['400', '500'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
     fattal = open(str(temp_directory) + "/fattal.txt", "a+")
-    fattal.write("\n{} {} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 4,", "'guests': 3,", "'breakfast': ['no', 'yes'],", "'cost': ['400$', '500$'],","'day': ['sunday', 'monday', 'tuesday', 'wednesday']}"))
+    fattal.write("\n{} {} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 4,", "'guests': 3,", "'breakfast': ['no', 'yes'],", "'cost': ['400', '500'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
     fattal.close()
 
     isrotel = open(str(temp_directory) + "/isrotel.txt", "w+")
-    isrotel.write("{} {} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 1,", "'guests': 2,", "'breakfast': ['no', 'yes'],", "'cost': ['100$', '150$'],","'day': ['sunday', 'monday', 'tuesday', 'wednesday']}"))
+    isrotel.write("{} {} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 1,", "'guests': 2,", "'breakfast': ['no', 'yes'],", "'cost': ['100', '150'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
     isrotel = open(str(temp_directory) + "/isrotel.txt", "a+")
-    isrotel.write("\n{} {} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 2,", "'guests': 2,", "'breakfast': ['no', 'yes'],", "'cost': ['100$', '150$'],","'day': ['sunday', 'monday', 'tuesday', 'wednesday']}"))
+    isrotel.write("\n{} {} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 2,", "'guests': 2,", "'breakfast': ['no', 'yes'],", "'cost': ['100', '150'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
     isrotel = open(str(temp_directory) + "/isrotel.txt", "a+")
-    isrotel.write("\n{} {} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 3,", "'guests': 3,", "'breakfast': ['no', 'yes'],", "'cost': ['200$', '280$'],","'day': ['sunday', 'monday', 'tuesday', 'wednesday']}"))
+    isrotel.write("\n{} {} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 3,", "'guests': 3,", "'breakfast': ['no', 'yes'],", "'cost': ['200', '280'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
     isrotel = open(str(temp_directory) + "/isrotel.txt", "a+")
-    isrotel.write("\n{} {} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 4,", "'guests': 3,", "'breakfast': ['no', 'yes'],", "'cost': ['200$', '280$'],","'day': ['sunday', 'monday', 'tuesday', 'wednesday']}"))
+    isrotel.write("\n{} {} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 4,", "'guests': 3,", "'breakfast': ['no', 'yes'],", "'cost': ['200', '280'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
     isrotel.close()
 
     reservation = open(str(temp_directory) + "/reservation.txt", "w+")
@@ -142,39 +142,35 @@ def reservation():
     if guests > max_guests:
         quit("Both Fattal and Isrotel hotels can host maximum of " + str(max_guests) +
              " guests while you have requested to host " + str(guests) + " guests")
-    day = input(Style.BRIGHT + "Select your vacation day from the following days:"
-                               " ['sunday', 'monday', 'tuesday', 'wednesday']: ").lower()
+    day = int(input(Style.BRIGHT + "For how many nights you wish to stay?: "))
     if guests < max_guests:
         for line in open(str(temp_directory) + "/fattal.txt", "r").readlines():
             fattal = line.replace("'", "\"")
             fattal = json.loads(fattal)
-            if day in (list(fattal.values())[5]):
-                print("- Room " + str(list(fattal.values())[1]) + " in " + Fore.GREEN + Style.BRIGHT +
-                      str(list(fattal.values())[0]) + Fore.BLACK + Style.NORMAL + " hotel can host " +
-                      str(list(fattal.values())[2]) + " guests and is available on " +
-                      Fore.MAGENTA + str(day).capitalize())
+            if day < len(list(fattal.values())[5]):
+                print("- Room " + str(list(fattal.values())[2]) + " in <" + Fore.GREEN + Style.BRIGHT +
+                      str(list(fattal.values())[0]) + Fore.BLACK + Style.NORMAL + "> can host up to " +
+                      str(list(fattal.values())[2]) + " guests and is available for " +
+                      str((len(list(fattal.values())[5])) - 1) + " nights: " +
+                      str(list(fattal.values())[5]))
             else:
-                print(Fore.RED + "- Room " + str(list(fattal.values())[1]) + " is not available on " +
-                      str(day).capitalize())
-
+                print(Fore.RED + Style.BRIGHT + "- Room " + str(list(fattal.values())[1]) + " in <" +
+                      (list(isrotel.values())[0]) + "> is not available for " + str(day) + " nights")
         for line in open(str(temp_directory) + "/isrotel.txt", "r").readlines():
             isrotel = line.replace("'", "\"")
             isrotel = json.loads(isrotel)
-            if day in (list(isrotel.values())[5]):
-                print("- Room " + str(list(isrotel.values())[1]) + " in " + Fore.BLUE + Style.BRIGHT +
-                      str(list(isrotel.values())[0]) + Fore.BLACK + Style.NORMAL + " hotel can host " +
-                      str(list(isrotel.values())[2]) + " guests and is available on " +
-                      Fore.MAGENTA + str(day).capitalize())
+            if day < len(list(isrotel.values())[5]):
+                print("- Room " + str(list(isrotel.values())[2]) + " in <" + Fore.BLUE + Style.BRIGHT +
+                      str(list(isrotel.values())[0]) + Fore.BLACK + Style.NORMAL + "> can host up to " +
+                      str(list(isrotel.values())[2]) + " guests and is available for " +
+                      str((len(list(isrotel.values())[5])) - 1) + " nights: " +
+                      str(list(isrotel.values())[5]))
             else:
-                print(Fore.RED + "- Room " + str(list(isrotel.values())[1]) + " is not available on " +
-                      str(day).capitalize())
+                print(Fore.RED + Style.BRIGHT + "- Room " + str(list(isrotel.values())[1]) + " in <" +
+                      (list(isrotel.values())[0]) + "> is not available for " + str(day) + " nights")
 
-
-
-
-
-
-
+        nights = input(Style.BRIGHT + "\nEnter " + str(list(isrotel.values())[5]).replace("[","").replace("]","").replace("\'","") + ": ").lower()
+        print(nights)
 
 
 
@@ -217,8 +213,8 @@ def reservation():
     #     print("Breakfast is not included")
     # else:
     #     sys.stdout.write("Please respond with 'yes' or 'no'")
-
-reservation()
+files_creation()
+menu()
 
 
 
