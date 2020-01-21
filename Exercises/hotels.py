@@ -155,7 +155,7 @@ def reservation():
                       str(list(fattal.values())[5]))
             else:
                 print(Fore.RED + Style.BRIGHT + "- Room " + str(list(fattal.values())[1]) + " in <" +
-                      (list(isrotel.values())[0]) + "> is not available for " + str(day) + " nights")
+                      (list(fattal.values())[0]) + "> is not available for " + str(day) + " nights")
         for line in open(str(temp_directory) + "/isrotel.txt", "r").readlines():
             isrotel = line.replace("'", "\"")
             isrotel = json.loads(isrotel)
