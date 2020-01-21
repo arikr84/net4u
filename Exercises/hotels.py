@@ -1,36 +1,15 @@
-# augost sunday - חמישי
-# first week of augost
-#
-# trivago
-#
-# fattal - 4 rooms 200$- 1 room for couple 250$- 1 room for couple with breakfast 350$- 1 room for tree  - 1 room three + breakfast 420$
-# isrotel - 1 room for 1 100$  -  1 room for couple 170$ / 200$ with breakfast  - 1 room for three 380$ - 1 room for 4 450$ / 550$ with BF
-#
-# we give the coustomer menu
-# 1. check available rooms all hotels  - read files
-# 2. reservation - which hotel?, how much rooms? how much people, nights, breakfast, if 2 rooms same hotel?  - return free rooms and cheapest price in SHEKELS (need to convert $ to ILS)
-# 3. cancle reservation cost 75%
-# 4. add nights / room for reservation
-#
-# file for each hotels with all the information
-#
-# fattal.txt
-# isrotel.txt
-# reservation.txt
-
 from colorama import Fore, init, Style
 init(autoreset=True)
 import tempfile
 import json
+import re
+import random
 
 def menu():
     break_counter = 0
-    option = int(input(Fore.MAGENTA + "Trivago\n" + Fore.BLUE + "The Best Rooms For the Best Prices.\n\n" + Fore.BLACK + ""
-                                        "- Enter (1) to check available rooms\n"
-                                                "- Enter (2) to reserve a room\n"
-                                                        "- Enter (3) to cancel reservation\n"
-                                                                "- Enter (4) to add night/room for a reservation\n\n"
-                                                                        "Enter your selection: "))
+    option = int(input(Fore.MAGENTA + "Trivago\n" + Fore.BLUE + "The Best Rooms For the Best Prices.\n\n" + Fore.BLACK +
+                       "- Enter (1) to check available rooms\n- Enter (2) to reserve a room\n- Enter (3) to cancel"
+                       " reservation\n- Enter (4) to add night/room for a reservation\n\nEnter your selection: "))
     while option == 0 or option > 4:
         break_counter = break_counter + 1
         if break_counter < 6:
@@ -41,8 +20,7 @@ def menu():
     if option == 0 or option > 4:
         print(Fore.RED + "\nERROR: Maximum (5) tries exceeded. Next time enter an option between 1 to 5. Exiting...")
     if option == 1:
-        check_available_rooms_fattal()
-        check_available_rooms_isrotel()
+        check_available_rooms()
     if option == 2:
         reservation()
     if option == 3:
@@ -52,172 +30,83 @@ def menu():
 
 def files_creation():
     temp_directory = tempfile.gettempdir()
-    fattal = open(str(temp_directory) + "/fattal.txt", "w+")
-    fattal.write("{} {} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 1,", "'guests': 2,", "'breakfast': ['no', 'yes'],", "'cost': ['200', '280'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
-    fattal = open(str(temp_directory) + "/fattal.txt", "a+")
-    fattal.write("\n{} {} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 2,", "'guests': 2,", "'breakfast': ['no', 'yes'],", "'cost': ['200', '280'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
-    fattal = open(str(temp_directory) + "/fattal.txt", "a+")
-    fattal.write("\n{} {} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 3,", "'guests': 3,", "'breakfast': ['no', 'yes'],", "'cost': ['400', '500'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
-    fattal = open(str(temp_directory) + "/fattal.txt", "a+")
-    fattal.write("\n{} {} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 4,", "'guests': 3,", "'breakfast': ['no', 'yes'],", "'cost': ['400', '500'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
-    fattal.close()
-
-    isrotel = open(str(temp_directory) + "/isrotel.txt", "w+")
-    isrotel.write("{} {} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 1,", "'guests': 2,", "'breakfast': ['no', 'yes'],", "'cost': ['100', '150'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
-    isrotel = open(str(temp_directory) + "/isrotel.txt", "a+")
-    isrotel.write("\n{} {} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 2,", "'guests': 2,", "'breakfast': ['no', 'yes'],", "'cost': ['100', '150'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
-    isrotel = open(str(temp_directory) + "/isrotel.txt", "a+")
-    isrotel.write("\n{} {} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 3,", "'guests': 3,", "'breakfast': ['no', 'yes'],", "'cost': ['200', '280'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
-    isrotel = open(str(temp_directory) + "/isrotel.txt", "a+")
-    isrotel.write("\n{} {} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 4,", "'guests': 3,", "'breakfast': ['no', 'yes'],", "'cost': ['200', '280'],","'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
-    isrotel.close()
+    hotels = open(str(temp_directory) + "/hotels.txt", "w+")
+    hotels.write("{} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 1,", "'guests': 2,", "'cost': " + str(random.randrange(200, 500)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels = open(str(temp_directory) + "/hotels.txt", "a+")
+    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 2,", "'guests': 2,", "'cost': " + str(random.randrange(200, 500)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 3,", "'guests': 3,", "'cost': " + str(random.randrange(200, 500)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 4,", "'guests': 3,", "'cost': " + str(random.randrange(200, 500)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 1,", "'guests': 2,", "'cost': " + str(random.randrange(200, 500)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 2,", "'guests': 2,", "'cost': " + str(random.randrange(200, 500)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 3,", "'guests': 3,", "'cost': " + str(random.randrange(200, 500)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 4,", "'guests': 3,", "'cost': " + str(random.randrange(200, 500)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.close()
 
     reservation = open(str(temp_directory) + "/reservation.txt", "w+")
     reservation.close()
 
-def check_available_rooms_fattal():
+def check_available_rooms():
     temp_directory = tempfile.gettempdir()
-    for line in open(str(temp_directory) + "/fattal.txt", "r").readlines():
-        fattal = line.replace("'", "\"")
-        fattal = json.loads(fattal)
-        if len(list(fattal.values())[5]) == 4:
-            print(Style.BRIGHT + Fore.BLUE + "hotel: " + str(list(fattal.values())[0]) + Style.NORMAL + Fore.BLACK + " | room: " + str(list(fattal.values())[1]) + " | guests: " + str(list(fattal.values())[2]) +
-                  " | breakfast not included: " + str(list(fattal.values())[4][0]) + " | breakfast included: " +
-                  str(list(fattal.values())[4][1]) + " | available for " + str(
-                len(list(fattal.values())[5])) + " days: " + str(list(fattal.values())[5]))
-        else:
-            print(Fore.RED + str(temp_directory) + "/fattal.txt doesn't contain 4 lines (line for each room)"
-                                                   " as expected.")
-            quit()
-
-def check_available_rooms_isrotel():
-    temp_directory = tempfile.gettempdir()
-    for line in open(str(temp_directory) + "/isrotel.txt", "r").readlines():
-        isrotel = line.replace("'", "\"")
-        isrotel = json.loads(isrotel)
-        if len(list(isrotel.values())[5]) == 4:
-            print(Style.BRIGHT + Fore.GREEN + "hotel: " + str(list(isrotel.values())[0]) + Style.NORMAL + Fore.BLACK +
-                  " | room: " + str(list(isrotel.values())[1]) + " | guests: " + str(list(isrotel.values())[2]) +
-                  " | breakfast not included: " + str(list(isrotel.values())[4][0]) + " | breakfast included: " +
-                  str(list(isrotel.values())[4][1]) + " | available for " + str(
-                len(list(isrotel.values())[5])) + " days: " + str(list(isrotel.values())[5]))
-        else:
-            print(Fore.RED + str(temp_directory) + "/isrotel.txt doesn't contain 4 lines (line for each room)"
-                                                   " as expected.")
-            quit()
+    for line in open(str(temp_directory) + "/hotels.txt", "r").readlines():
+        hotels = line.replace("'", "\"")
+        hotels = json.loads(hotels)
+        print(Fore.LIGHTBLUE_EX + str(hotels))
 
 def max_guests_capacity():
-    isrotel_max_guests = 0
-    fattal_max_guests = 0
+    guest_capacity = 0
     temp_directory = tempfile.gettempdir()
-    for line in open(str(temp_directory) + "/isrotel.txt", "r").readlines():
-        isrotel = line.replace("'", "\"")
-        isrotel = json.loads(isrotel)
-        isrotel_max_guests = isrotel_max_guests + list(isrotel.values())[2]
-    for line in open(str(temp_directory) + "/fattal.txt", "r").readlines():
-        fattal = line.replace("'", "\"")
-        fattal = json.loads(fattal)
-        fattal_max_guests = fattal_max_guests + list(fattal.values())[2]
-    max_guests = isrotel_max_guests + fattal_max_guests
-    return max_guests
-
-
-        # if len(list(isrotel.values())[5]) == 4:
-        #     print(Style.BRIGHT + Fore.GREEN + "hotel: " + str(list(isrotel.values())[0]) + Style.NORMAL + Fore.BLACK +
-        #           " | room: " + str(list(isrotel.values())[1]) + " | guests: " + str(list(isrotel.values())[2]) +
-        #           " | breakfast not included: " + str(list(isrotel.values())[4][0]) + " | breakfast included: " +
-        #           str(list(isrotel.values())[4][1]) + " | available for " + str(
-        #         len(list(isrotel.values())[5])) + " days: " + str(list(isrotel.values())[5]))
-        # else:
-        #     print(Fore.RED + str(temp_directory) + "/isrotel.txt doesn't contain 4 lines (line for each room)"
-        #                                            " as expected.")
-        #     quit()
-
-
+    for line in open(str(temp_directory) + "/hotels.txt", "r").readlines():
+        hotels = line.replace("'", "\"")
+        hotels = json.loads(hotels)
+        if not re.search("'day': \[]", line):
+            guest_capacity = guest_capacity + list(hotels.values())[2]
+    return guest_capacity // 2
 
 def reservation():
-    max_guests = max_guests_capacity()
     temp_directory = tempfile.gettempdir()
-    guests = int(input(Style.BRIGHT + "Number of guests on the reservation?: "))
-    if guests > max_guests:
-        quit("Both Fattal and Isrotel hotels can host maximum of " + str(max_guests) +
-             " guests while you have requested to host " + str(guests) + " guests")
-    day = int(input(Style.BRIGHT + "For how many nights you wish to stay?: "))
-    if guests < max_guests:
-        for line in open(str(temp_directory) + "/fattal.txt", "r").readlines():
-            fattal = line.replace("'", "\"")
-            fattal = json.loads(fattal)
-            if day < len(list(fattal.values())[5]):
-                print("- Room " + str(list(fattal.values())[2]) + " in <" + Fore.GREEN + Style.BRIGHT +
-                      str(list(fattal.values())[0]) + Fore.BLACK + Style.NORMAL + "> can host up to " +
-                      str(list(fattal.values())[2]) + " guests and is available for " +
-                      str((len(list(fattal.values())[5])) - 1) + " nights: " +
-                      str(list(fattal.values())[5]))
-            else:
-                print(Fore.RED + Style.BRIGHT + "- Room " + str(list(fattal.values())[1]) + " in <" +
-                      (list(fattal.values())[0]) + "> is not available for " + str(day) + " nights")
-        for line in open(str(temp_directory) + "/isrotel.txt", "r").readlines():
-            isrotel = line.replace("'", "\"")
-            isrotel = json.loads(isrotel)
-            if day < len(list(isrotel.values())[5]):
-                print("- Room " + str(list(isrotel.values())[2]) + " in <" + Fore.BLUE + Style.BRIGHT +
-                      str(list(isrotel.values())[0]) + Fore.BLACK + Style.NORMAL + "> can host up to " +
-                      str(list(isrotel.values())[2]) + " guests and is available for " +
-                      str((len(list(isrotel.values())[5])) - 1) + " nights: " +
-                      str(list(isrotel.values())[5]))
-            else:
-                print(Fore.RED + Style.BRIGHT + "- Room " + str(list(isrotel.values())[1]) + " in <" +
-                      (list(isrotel.values())[0]) + "> is not available for " + str(day) + " nights")
+    available_rooms_counter = 0
+    nights_counter = 0
+    guest_capacity = max_guests_capacity()
 
-        nights = input(Style.BRIGHT + "\nEnter " + str(list(isrotel.values())[5]).replace("[","").replace("]","").replace("\'","") + ": ").lower()
-        print(nights)
+    guests = int(input(Style.BRIGHT + "[Please enter guests number]: "))
+    if guests > guest_capacity:
+        quit("You have requested to host " + str(guests) + " guests which is more than our maximum capacity (" + str
+        (guest_capacity) + ")")
 
+    rooms = int(input(Style.BRIGHT + "[Please enter how many room you wish to acquire]: "))
+    if rooms > guests:
+        quit("The number of requested rooms (" + str(rooms) + ") can't be lower than the number of guests (" +
+             str(guests) + ").")
 
+    for line in open(str(temp_directory) + "/hotels.txt", "r").readlines():
+        if not re.search("'day': \[]", line):
+            available_rooms_counter = available_rooms_counter + 1
+    available_rooms_counter = available_rooms_counter // 2
+    if rooms > available_rooms_counter:
+        quit("You requested more rooms (" + str(rooms) + ") than our maximum available rooms (" +
+             str(available_rooms_counter) + ").")
 
-    #         if len(list(fattal.values())[5]) > 0:
-    #             print("- Room " + str(list(fattal.values())[1]) + " in " + Fore.GREEN + Style.BRIGHT +
-    #                   str(list(fattal.values())[0]) + Fore.BLACK + Style.NORMAL + " hotel can host " +
-    #                   str(list(fattal.values())[2]) + " guests and is available in the following " +
-    #                   str(len(list(fattal.values())[5])) + " days of the first week of August: " +
-    #                   str(list(fattal.values())[5]))
-    #         else:
-    #             print(Fore.RED + "- Room " + str(list(fattal.values())[1]) + " in " + str(list(fattal.values())[0]) +
-    #                   " hotel is already taken")
-    #     for line in open(str(temp_directory) + "/isrotel.txt", "r").readlines():
-    #         isrotel = line.replace("'", "\"")
-    #         isrotel = json.loads(isrotel)
-    #         if len(list(isrotel.values())[5]) > 0:
-    #             print("- Room " + str(list(isrotel.values())[1]) + " in " + Fore.BLUE + Style.BRIGHT +
-    #                   str(list(isrotel.values())[0]) + Fore.BLACK + Style.NORMAL + " hotel can host " +
-    #                   str(list(isrotel.values())[2]) + " guests and is available in the following " +
-    #                   str(len(list(isrotel.values())[5])) + " days of the first week of August: " +
-    #                   str(list(isrotel.values())[5]))
-    #         else:
-    #             print(Fore.RED + "- Room " + str(list(isrotel.values())[1]) + " in " + str(list(isrotel.values())[0]) +
-    #                   " hotel is already taken")
-    #             quit()
-    #
-    # print(Fore.MAGENTA + Style.BRIGHT +"\nReservation for " + str(guests) + " guest(s) accepted")
-    # rooms = guests/2
-    # print(rooms)
+    nights = int(input(Style.BRIGHT + "[Please enter how many nights you wish to stay]: "))
+    for line in open(str(temp_directory) + "/hotels.txt", "r").readlines():
+        file = line.replace("'", "\"")
+        file = json.loads(file)
+        if nights > len(list(file.values())[4]) - 1:
+            nights_counter = nights_counter + 1
+    nights_counter = nights_counter // 2
+    if nights_counter == 8:
+        quit("Couldn't find a single room that is available for " + str(nights) + " night(s)")
 
+    breakfast = input(Style.BRIGHT + "[You wish to enjoy our breakfast in exchange for 50$ per night (Yes/No)]: ").lower()
+    while breakfast != "yes" and breakfast != "no":
+        breakfast = input(Style.BRIGHT + "[Please enter 'Yes' or 'No']: ").lower()
 
+    reservation = open(str(temp_directory) + "/reservation.txt", "w+")
 
-
-    # yes = {'yes', 'y', 'ye', ''}
-    # no = {'no', 'n'}
-    # breakfast = input("Breakfast included?. Please respond with 'yes' or 'no': ").lower()
-    # if breakfast in yes:
-    #     print("Breakfast included")
-    # elif breakfast in no:
-    #     print("Breakfast is not included")
-    # else:
-    #     sys.stdout.write("Please respond with 'yes' or 'no'")
-files_creation()
 menu()
-
-
-
+#
+# guests / rooms == how many people inside 1 room.  if return > 3 it's not possible since max room size is 3
+# if == 3 need to check if there are available rooms for 3 people ---- for example if 6 guests want 2 rooms I need to find 2 rooms that can fill each 3 people
+# if == 2 or less than 2 need to find any available rooms to fill these people
 
 #1 Understand how many rooms there are available for 2 people
 #2 Understand how many rooms there are available for 3 people
