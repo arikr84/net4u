@@ -62,10 +62,28 @@ def max_guests_capacity():
             guest_capacity = guest_capacity + list(hotels.values())[2]
     return guest_capacity
 
+def decision():
+    decision = input("\nEnter '1' to continue with the suggested offer\nEnter '2' to get a new offer from 1 hotel only"
+                     "\nEnter '3' to chose which hotel to reside in\nEnter '4' to withdraw the reservation\n\nPlease enter you decision: ")
+    while decision != 1 and decision != 2 and decision != 3:
+        decision = input(str(decision) + " In not a valid option. Please enter a number between 1 and 3: ")
+    if decision == 1:
+        print("Thank you for counting on us to supply the best and cheapest rooms for you.")
+        pass
+    if decision == 2:
+        print()
+    if decision == 3:
+        print()
+    if decision == 4:
+        quit("Thank you for using our services. Exiting..")
+
 def reservation():
+    global hotels
     temp_directory = tempfile.gettempdir()
     available_rooms_counter = 0
     nights_counter = 0
+    rooms_counter = 0
+    costs = []
     guest_capacity = max_guests_capacity()
 
     guests = int(input(Style.BRIGHT + "[Please enter guests number]: "))
@@ -83,10 +101,20 @@ def reservation():
     if nights_counter == 8:
         quit("Couldn't find a single room that is available for " + str(nights) + " night(s)")
 
-    rooms = int(input(Style.BRIGHT + "[Please enter how many rooms you wish to acquire]: "))
+    rooms = int(input(Style.BRIGHT + "[Please enter how many rooms you wish to acquire. Notice that our presidential "
+                                     "rooms intended for 3 guests while our regular rooms are intended for 2 guests"
+                                     " only]: "))
     if rooms > guests:
         quit("The number of requested rooms (" + str(rooms) + ") can't be higher than the number of guests (" +
-             str(guests) + ").")
+             str(guests) + "). This is a strict policy in our hotels network.")
+
+    for line in open(str(temp_directory) + "/hotels.txt", "r").readlines():
+        if not re.search("'day': \[]", line):
+            available_rooms_counter = available_rooms_counter + 1
+    available_rooms_counter = available_rooms_counter
+    if rooms > available_rooms_counter:
+        quit("You requested more rooms (" + str(rooms) + ") than our maximum available rooms (" +
+             str(available_rooms_counter) + ").")
 
     guests_per_room = guests / rooms
     if guests_per_room > 3.0:
@@ -101,41 +129,25 @@ def reservation():
         if int(len(list(hotels.values())[4])) > nights:
             # print(Fore.LIGHTBLUE_EX + str(hotels))
             available_rooms.write("{}\n".format(str(hotels)))
-            # print("aaaaaaaaaaaaaaaaaaaaaaa" + str(list(available_rooms.values())[3]))
-    a = list(hotels.values())[3]
-    print("aaaaaaaaaa" + str(a))
-    available_rooms.close()
-    for line in open(str(temp_directory) + "/available_rooms.txt", "r").readlines():
-        available_rooms = line.replace("'", "\"")
-        available_rooms = json.loads(available_rooms)
-        print("BBBB" + str(list(available_rooms.values())[3]))
-        if list(available_rooms.values())[3] < a:
-            b = list(available_rooms.values())[3]
-
-
-
-    print("dddddddddddd" + str(b))
-
-
-
-
-
-
-
-    for line in open(str(temp_directory) + "/hotels.txt", "r").readlines():
-        if not re.search("'day': \[]", line):
-            available_rooms_counter = available_rooms_counter + 1
-    available_rooms_counter = available_rooms_counter
-    if rooms > available_rooms_counter:
-        quit("You requested more rooms (" + str(rooms) + ") than our maximum available rooms (" +
-             str(available_rooms_counter) + ").")
-
+            costs.append(list(hotels.values())[3])
+            costs = sorted(costs)
+            continue
+    print(Fore.BLUE + "\nThe following " + str(rooms) + " room(s) are the cheapest rooms we could find for you. Notice "
+                                                        "that some rooms can reside in " + Fore.MAGENTA + "Fattal " +
+          Fore.BLUE + "and others in " + Fore.MAGENTA +  "Isrotel.")
+    for i in range(rooms):
+        for line in open(str(temp_directory) + "/available_rooms.txt", "r").readlines():
+            available_rooms = line.replace("'", "\"")
+            available_rooms = json.loads(available_rooms)
+            if re.search(str(costs[i]), str(available_rooms)):
+                print(Fore.GREEN + str(available_rooms))
+    decision()
     breakfast = input(Style.BRIGHT + "[You wish to enjoy our breakfast in exchange for extra 50$ per night (Yes/No)]: ").lower()
     while breakfast != "yes" and breakfast != "no":
         breakfast = input(Style.BRIGHT + "[Please enter 'Yes' or 'No']: ").lower()
 
     reservation = open(str(temp_directory) + "/reservation.txt", "w+")
-files_creation()
+
 menu()
 
 #
