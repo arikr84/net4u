@@ -88,8 +88,7 @@ def decision(x):
 def terms_and_conditions():
     print(Fore.RED + Style.BRIGHT + "\n  Terms, Conditions and Information\n  " + str("-" * 33) +
           Fore.LIGHTBLACK_EX + "\n- We offer rooms for 2 guests or 3 guests\n"
-                               "- The rooms price does not include breakfast\n"
-                               "- All prices are in USD\n- Breakfast can be included for an extra 50$ per night")
+                               "- All prices are in USD\n- Breakfast can be included for an extra 20$ per night")
     terms = int(input("\n- Enter (1) if you accept the terms and conditions: \n- Enter (2) if you refuse the terms and"
                       " conditions: "))
     while terms != 1 and terms != 2:
@@ -184,7 +183,7 @@ def reservation():
     if hotels_preferation == 3 and rooms > 8:
         quit("You have requested " + str(rooms) + " room(s). The maximum number of rooms in both Fattal and Isrotel is 8")
 
-    breakfast = input("[You wish to include breakfast in exchange for an extra " + Style.BRIGHT + Fore.GREEN + "50$" + Style.NORMAL + Fore.BLACK + " per night (Yes/No)]: ").lower()
+    breakfast = input("[You wish to include breakfast in exchange for an extra " + Style.BRIGHT + Fore.GREEN + "20$" + Style.NORMAL + Fore.BLACK + " per night (Yes/No)]: ").lower()
     while breakfast != "yes" and breakfast != "no":
         breakfast = input(Fore.RED + "[Please enter 'Yes' or 'No']: ").lower()
 
@@ -196,7 +195,7 @@ def reservation():
             hotels = json.loads(hotels)
             available_rooms = open(str(temp_directory) + "/available_rooms.txt", "a+")
             if int(len(list(hotels.values())[4])) > nights:
-                hotels['cost'] = hotels['cost'] + 50
+                hotels['cost'] = hotels['cost'] + 20 * nights
                 print(Fore.LIGHTBLACK_EX + str(hotels).replace("{", "").replace("}", "").replace("'", ""))
                 available_rooms.write("{}\n".format(str(hotels)))
                 costs.append(list(hotels.values())[3])
