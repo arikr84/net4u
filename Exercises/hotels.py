@@ -77,8 +77,8 @@ def max_guests_capacity():
             guest_capacity = guest_capacity + list(hotels.values())[2]
     return guest_capacity
 
-def decision(x,y):
-    if y != 1:
+def decision(x):
+    if x != 1:
         decision = int(input(Style.BRIGHT + Fore.GREEN + "\n\nEnter (1) to purchase and reserve the cheapest " + str(x) + " room(s)\n" + Fore.RED + "Enter (2) to withdraw the reservation\n\n" + Style.NORMAL + Fore.BLACK + "Please enter your decision: "))
     else:
         decision = int(input(Style.BRIGHT + Fore.GREEN + "\n\nEnter (1) to purchase and reserve the cheapest room\n" + Fore.RED + "Enter (2) to withdraw the reservation\n\n" + Style.NORMAL + Fore.BLACK + "Please enter your decision: "))
@@ -90,6 +90,20 @@ def decision(x,y):
     if decision == 2:
         quit("Thank you for using our services. Good-Bye!")
 
+def select_arrival_day():
+    arrival_day = int(input(
+        "\n[Please choose arrival day from the list of suggested rooms]: ").lower())
+    while arrival_day != "Sunday" and arrival_day != "Monday" and arrival_day != "Tuesday" and arrival_day != "Wednesday" and arrival_day != "Thursday":
+        arrival_day = int(input(str(arrival_day) + " is not a valid day. Please re-enter the arrival day: "))
+
+def select_departure_day(x):
+    departure_day = int(input(
+        "\n[Please choose departure day from the list of suggested rooms]: ").lower())
+    while departure_day == x:
+        departure_day = int(input(
+            "\n[Please choose departure day different from the selected arrival day" + str(x) + "]: ").lower())
+    while departure_day != "Sunday" and departure_day != "Monday" and departure_day != "Tuesday" and departure_day != "Wednesday" and departure_day != "Thursday":
+        departure_day = int(input(str(departure_day) + " is not a valid day. Please re-enter the arrival day: "))
 
 def continue_decision():
     continue_decision = int(input("\n- Enter (1) to continue with the rooms reservation process\n- Enter (2) to quit\n\nPlease enter your decision: "))
@@ -246,12 +260,10 @@ def reservation():
                         reservation.write(str(available_rooms) + "\n")
                         print(Fore.LIGHTBLUE_EX + str(available_rooms).replace("{", "").replace("}","").replace("'", "").title())
 
-    decision(rooms,rooms)
 
-def select_arrival_day():
-    days = int(input(
-        "\n[Please choose arrival day from the list of suggested rooms]\n\n- Enter (1) for 'Fattal'\n- Enter (2) for 'Isrotel'"
-        "\n- Enter (3) for both 'Fattal' and 'Isrotel'\n\nPlease enter your selection: ").lower())
+    decision(rooms)
+
+
 
 
 welcome()
