@@ -24,7 +24,9 @@ def menu():
         print(Fore.RED + "\nERROR: Maximum (5) tries exceeded. Next time enter an option between 1 to 5. Good-Bye!")
     if option == 1:
         check_available_rooms()
+        continue_decision()
     if option == 2:
+        files_creation()
         terms_and_conditions()
         reservation()
     if option == 3:
@@ -37,15 +39,15 @@ def menu():
 def files_creation():
     temp_directory = tempfile.gettempdir()
     hotels = open(str(temp_directory) + "/hotels.txt", "w+")
-    hotels.write("{} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 1,", "'maximum guests capacity': 2,", "'cost': " + str(random.randrange(200, 450)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.write("{} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 1,", "'maximum guests capacity': 2,", "'cost': " + str(random.randrange(250, 450)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
     hotels = open(str(temp_directory) + "/hotels.txt", "a+")
-    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 2,", "'maximum guests capacity': 2,", "'cost': " + str(random.randrange(200, 450)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
-    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 3,", "'maximum guests capacity': 3,", "'cost': " + str(random.randrange(200, 450)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
-    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 4,", "'maximum guests capacity': 3,", "'cost': " + str(random.randrange(200, 450)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
-    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 1,", "'maximum guests capacity': 2,", "'cost': " + str(random.randrange(300, 550)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
-    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 2,", "'maximum guests capacity': 2,", "'cost': " + str(random.randrange(300, 550)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
-    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 3,", "'maximum guests capacity': 3,", "'cost': " + str(random.randrange(300, 550)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
-    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 4,", "'maximum guests capacity': 3,", "'cost': " + str(random.randrange(300, 550)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 2,", "'maximum guests capacity': 2,", "'cost': " + str(random.randrange(250, 450)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 3,", "'maximum guests capacity': 3,", "'cost': " + str(random.randrange(300, 500)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Fattal',", "'room': 4,", "'maximum guests capacity': 3,", "'cost': " + str(random.randrange(300, 500)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 1,", "'maximum guests capacity': 2,", "'cost': " + str(random.randrange(350, 550)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 2,", "'maximum guests capacity': 2,", "'cost': " + str(random.randrange(350, 550)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 3,", "'maximum guests capacity': 3,", "'cost': " + str(random.randrange(350, 550)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
+    hotels.write("\n{} {} {} {} {}".format("{'hotel': 'Isrotel',", "'room': 4,", "'maximum guests capacity': 3,", "'cost': " + str(random.randrange(350, 550)) + ",", "'day': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']}"))
     hotels.close()
 
     reservation = open(str(temp_directory) + "/reservation.txt", "w+")
@@ -57,7 +59,7 @@ def check_available_rooms():
     for line in open(str(temp_directory) + "/hotels.txt", "r").readlines():
         hotels = line.replace("'", "\"")
         hotels = json.loads(hotels)
-        print(Fore.LIGHTBLUE_EX + str(hotels).replace("{","").replace("}","").replace("'",""))
+        print(Fore.LIGHTBLUE_EX + str(hotels).replace("{","").replace("}","").replace("'","").title())
 
 def readlines_hotels():
     temp_directory = tempfile.gettempdir()
@@ -75,21 +77,37 @@ def max_guests_capacity():
             guest_capacity = guest_capacity + list(hotels.values())[2]
     return guest_capacity
 
-def decision(x):
-    decision = int(input(Style.BRIGHT + Fore.GREEN + "\n\nEnter (1) purchase and reserve the cheapest " + str(x) + " room(s)\n" + Fore.RED + "Enter (2) to withdraw the reservation\n\n" + Style.NORMAL + Fore.BLACK + "Please enter your decision: "))
+def decision(x,y):
+    if y != 1:
+        decision = int(input(Style.BRIGHT + Fore.GREEN + "\n\nEnter (1) to purchase and reserve the cheapest " + str(x) + " room(s)\n" + Fore.RED + "Enter (2) to withdraw the reservation\n\n" + Style.NORMAL + Fore.BLACK + "Please enter your decision: "))
+    else:
+        decision = int(input(Style.BRIGHT + Fore.GREEN + "\n\nEnter (1) to purchase and reserve the cheapest room\n" + Fore.RED + "Enter (2) to withdraw the reservation\n\n" + Style.NORMAL + Fore.BLACK + "Please enter your decision: "))
     while decision != 1 and decision != 2:
         decision = int(input(str(decision) + " is not a valid option. Please enter 1 or 2: "))
     if decision == 1:
-        print(Style.BRIGHT + Fore.BLUE + "\n>>> Thank you for choosing our hotels network. We wish you the finest vacation. Please wait few moments while we handle your reservation...")
+        print(Style.BRIGHT + Fore.BLUE + "\n>>> Thank you for choosing our hotels network. We wish you the finest vacation. Please wait few seconds while we handle your reservation...")
         sleep(5)
     if decision == 2:
         quit("Thank you for using our services. Good-Bye!")
 
+
+def continue_decision():
+    continue_decision = int(input("\n- Enter (1) to continue with the rooms reservation process\n- Enter (2) to quit\n\nPlease enter your decision: "))
+    while continue_decision != 1 and continue_decision != 2:
+        continue_decision = int(input(str(continue_decision) + " is not a valid option. Please enter 1 or 2: "))
+    if continue_decision == 1:
+        print("Please wait few seconds while we redirect you to the reservations interface...\n")
+        sleep(5)
+        print("<<< Welcome to our reservations interface >>>")
+        reservation()
+    if continue_decision == 2:
+        quit("Thank you for using our services. Good-Bye!")
+
 def terms_and_conditions():
     print(Fore.RED + Style.BRIGHT + "\n  Terms, Conditions and Information\n  " + str("-" * 33) +
-          Fore.LIGHTBLACK_EX + "\n- We offer rooms for 2 guests or 3 guests\n"
+          Fore.LIGHTBLACK_EX + "\n- The only available rooms are from August 2 till August 6 2020 (Sunday till Thursday)\n- We offer rooms for 2 guests or 3 guests\n"
                                "- All prices are in USD\n- Breakfast can be included for an extra 20$ per night")
-    terms = int(input("\n- Enter (1) if you accept the terms and conditions: \n- Enter (2) if you refuse the terms and"
+    terms = int(input("\n- Enter (" + Fore.GREEN + "1" + Fore.BLACK + ") if you accept the terms and conditions: \n- Enter (" + Fore.RED + "2" + Fore.BLACK + ") if you refuse the terms and"
                       " conditions: "))
     while terms != 1 and terms != 2:
         terms = int(input(Fore.LIGHTRED_EX + "  (" + str(terms) + ") In not a valid option. Please enter a number between 1 and 2: "))
@@ -102,7 +120,7 @@ def terms_and_conditions():
         while agree != "yes" and agree != "no":
             agree = input(Fore.LIGHTRED_EX + "  (" + str(agree) + ") In not a valid option. Please enter [Yes/No]: ").lower()
         if agree == "yes":
-            print(Fore.LIGHTBLUE_EX + "Please wait a few moments until we reach the hotels manager...")
+            print(Fore.LIGHTBLUE_EX + "Please wait few seconds until we reach the hotels manager...")
             sleep(10)
             quit("We are sorry, the manager is sick today and can't be reached. Good-bye..")
         else:
@@ -110,7 +128,7 @@ def terms_and_conditions():
 
 def presentation(a,b,c,d,e):
     print(Style.BRIGHT + Fore.BLUE + "\nYou have requested us to host " + str(a) + " guests in " + str(
-        b) + " rooms for " + str(c) + " nights in " + str(d) + " | breakfast = " + str(e))
+        b) + " rooms for " + str(c) + " night(s) in " + str(d) + " | breakfast = " + str(e))
     print(Style.BRIGHT + "\nThe following room(s) are the cheapest rooms we could find for you:\n" + str("-") * 67)
 
 def available_rooms_empty_file_creation():
@@ -187,76 +205,53 @@ def reservation():
     while breakfast != "yes" and breakfast != "no":
         breakfast = input(Fore.RED + "[Please enter 'Yes' or 'No']: ").lower()
 
-    if breakfast == "yes":
-        print(Style.BRIGHT + "\nPresenting all the rooms that are available for " + str(nights) + " nights with breakfast cost included:\n" + str("-") * 86)
-        available_rooms_empty_file_creation()
-        for line in open(str(temp_directory) + "/hotels.txt", "r").readlines():
-            hotels = line.replace("'", "\"")
-            hotels = json.loads(hotels)
-            available_rooms = open(str(temp_directory) + "/available_rooms.txt", "a+")
-            if int(len(list(hotels.values())[4])) > nights:
+    # print(Style.BRIGHT + "\nPresenting all the rooms that are available for " + str(nights) + " nights with breakfast cost included:\n" + str("-") * 86)
+    available_rooms_empty_file_creation()
+    for line in open(str(temp_directory) + "/hotels.txt", "r").readlines():
+        hotels = line.replace("'", "\"")
+        hotels = json.loads(hotels)
+        available_rooms = open(str(temp_directory) + "/available_rooms.txt", "a+")
+        if int(len(list(hotels.values())[4])) > nights:
+            if breakfast == "yes":
                 hotels['cost'] = hotels['cost'] + 20 * nights
-                print(Fore.LIGHTBLACK_EX + str(hotels).replace("{", "").replace("}", "").replace("'", ""))
-                available_rooms.write("{}\n".format(str(hotels)))
-                costs.append(list(hotels.values())[3])
-                costs = sorted(costs)
-        presentation(guests,rooms,nights,hotel_name,breakfast)
-        for i in range(available_rooms_counter):
-            for line in open(str(temp_directory) + "/available_rooms.txt", "r").readlines():
-                available_rooms = line.replace("'", "\"")
-                available_rooms = json.loads(available_rooms)
-                if hotels_preferation == 1:
+            if breakfast == "no":
+                hotels['cost'] = hotels['cost']
+            # print(Fore.LIGHTBLACK_EX + str(hotels).replace("{", "").replace("}", "").replace("'", ""))
+            available_rooms.write("{}\n".format(str(hotels)))
+            costs.append(list(hotels.values())[3])
+            costs = sorted(costs)
+    presentation(guests,rooms,nights,hotel_name,breakfast)
+    for i in range(available_rooms_counter):
+        for line in open(str(temp_directory) + "/available_rooms.txt", "r").readlines():
+            available_rooms = line.replace("'", "\"")
+            available_rooms = json.loads(available_rooms)
+            if hotels_preferation == 1:
+                if re.search(str(costs[i]), str(available_rooms)):
+                    if re.search("Fattal", str(available_rooms)):
+                        reservation = open(str(temp_directory) + "/reservation.txt", "a+")
+                        if i < rooms:
+                            reservation.write(str(available_rooms) + "\n")
+                            print(Fore.LIGHTBLUE_EX + str(available_rooms).replace("{", "").replace("}", "").replace("'", "").title)
+            if hotels_preferation == 2:
+                if re.search("Isrotel", str(available_rooms)):
                     if re.search(str(costs[i]), str(available_rooms)):
-                        if re.search("Fattal", str(available_rooms)):
-                            print(Fore.LIGHTBLUE_EX + str(available_rooms).replace("{", "").replace("}", "").replace("'", ""))
-                if hotels_preferation == 2:
-                    if re.search("Isrotel", str(available_rooms)):
-                        if re.search(str(costs[i]), str(available_rooms)):
-                            print(Fore.LIGHTBLUE_EX + str(available_rooms).replace("{", "").replace("}", "").replace("'", ""))
-                if hotels_preferation == 3:
-                    if re.search(str(costs[i]), str(available_rooms)):
-                        print(Fore.LIGHTBLUE_EX + str(available_rooms).replace("{", "").replace("}","").replace("'", ""))
+                        reservation = open(str(temp_directory) + "/reservation.txt", "a+")
+                        if i < rooms:
+                            reservation.write(str(available_rooms) + "\n")
+                            print(Fore.LIGHTBLUE_EX + str(available_rooms).replace("{", "").replace("}", "").replace("'", "").title)
+            if hotels_preferation == 3:
+                if re.search(str(costs[i]), str(available_rooms)):
+                    reservation = open(str(temp_directory) + "/reservation.txt", "a+")
+                    if i < rooms:
+                        reservation.write(str(available_rooms) + "\n")
+                        print(Fore.LIGHTBLUE_EX + str(available_rooms).replace("{", "").replace("}","").replace("'", "").title())
 
-    if breakfast == "no":
-        print(Style.BRIGHT + "\nPresenting all the rooms that are available for " + str(nights) + " nights:\n" + (str("-") * 57))
-        available_rooms_empty_file_creation()
-        for line in open(str(temp_directory) + "/hotels.txt", "r").readlines():
-            hotels = line.replace("'", "\"")
-            hotels = json.loads(hotels)
-            available_rooms = open(str(temp_directory) + "/available_rooms.txt", "a+")
-            if int(len(list(hotels.values())[4])) > nights:
-                print(Fore.LIGHTBLACK_EX + str(hotels).replace("{", "").replace("}", "").replace("'", ""))
-                available_rooms.write("{}\n".format(str(hotels)))
-                costs.append(list(hotels.values())[3])
-                costs = sorted(costs)
-                continue
-        presentation(guests,rooms,nights,hotel_name,breakfast)
-        for i in range(available_rooms_counter):
-            for line in open(str(temp_directory) + "/available_rooms.txt", "r").readlines():
-                available_rooms = line.replace("'", "\"")
-                available_rooms = json.loads(available_rooms)
-                if hotels_preferation == 1:
-                    if re.search(str(costs[i]), str(available_rooms)):
-                        if re.search("Fattal", str(available_rooms)):
-                            print(Fore.LIGHTBLUE_EX + str(available_rooms).replace("{", "").replace("}", "").replace("'", ""))
+    decision(rooms,rooms)
 
-                if hotels_preferation == 2:
-                    if re.search("Isrotel", str(available_rooms)):
-                        if re.search(str(costs[i]), str(available_rooms)):
-                            print(Fore.LIGHTBLUE_EX + str(available_rooms).replace("{", "").replace("}", "").replace("'", ""))
-
-
-                if hotels_preferation == 3:
-                    if re.search(str(costs[i]), str(available_rooms)):
-                        print(Fore.LIGHTBLUE_EX + str(available_rooms).replace("{", "").replace("}","").replace("'", ""))
-
-        decision(rooms)
-
-
-                    #         reservation = open(str(temp_directory) + "/reservation.txt", "a+")
-                    #         reservation.write(str(available_rooms) + "\n")
-                    #         print(Style.BRIGHT + Fore.GREEN + str(available_rooms))
-
+def select_arrival_day():
+    days = int(input(
+        "\n[Please choose arrival day from the list of suggested rooms]\n\n- Enter (1) for 'Fattal'\n- Enter (2) for 'Isrotel'"
+        "\n- Enter (3) for both 'Fattal' and 'Isrotel'\n\nPlease enter your selection: ").lower())
 
 
 welcome()
