@@ -1,5 +1,6 @@
 from time import sleep
 from colorama import Fore, init, Style
+
 init(autoreset=True)
 import tempfile
 import json
@@ -83,7 +84,7 @@ def check_available_rooms():
 
 def sleep_loading(x):
     for i in range(x):
-        print('...', end='')
+        print('.' * 5, end='')
         sleep(1)
     print("\n")
 
@@ -260,13 +261,14 @@ def presentation(a, b, c, d, e, f, g):
         e = "The deal includes breakfast"
     if e == "no":
         e = "The deal does not includes breakfast"
-    print(Style.BRIGHT + Fore.LIGHTBLUE_EX + "\nDear " + str(g) + ", you have searched for " + str(f) + " room(s) in " + str(d) + " for " + str(
+    print(Style.BRIGHT + Fore.LIGHTBLUE_EX + "\nDear " + str(g) + ", you have searched for " + str(
+        f) + " room(s) in " + str(d) + " for " + str(
         a) + " guests over " + str(c) + " night(s) (" + str(b).replace("'", "") + "). " + str(e))
-    reservation_validation = input("[The above reservation details are as intended? Enter (Yes/No)]: ").lower()
+    reservation_validation = input("[The above reservation details are correct? Enter (Yes/No)]: ").lower()
     if reservation_validation == "yes":
         print(
             Style.BRIGHT + "Searching for the cheapest rooms by your demands. The rooms prices are final.")
-        sleep_loading(x=10)
+        # sleep_loading(x=10)
     if reservation_validation == "no":
         print("Please wait few seconds while restarting the reservation process...")
         sleep_loading(x=5)
@@ -287,7 +289,7 @@ def available_rooms_empty_file_creation():
 
 
 def reservation():
-    global hotels
+    # global hotels
     breakfast_price = 20
     temp_directory = tempfile.gettempdir()
     nights_counter = 0
@@ -313,6 +315,8 @@ def reservation():
 
     arrival_day = select_arrival_day(nights)
     days_list = select_departure_day(arrival_day, nights)
+    departure_day = list(days_list.split(","))
+    departure_day = departure_day[-1].replace("'","").replace(" ","")
 
     rooms = int(input("[Please enter how many rooms you wish to reserve]: "))
     if rooms > guests:
@@ -415,11 +419,16 @@ def reservation():
                         if re.search(str(days_list), str(available_rooms_fattal)):
                             reservation_file = open(str(temp_directory) + "/reservation.txt", "a+")
                             if i < rooms:
-                                reservation_file.write(str(available_rooms_fattal) + "\n")
+                                reservation_file.write(str("Full Name: " + str(full_name) + ", ID number: " + str(
+                                    identification_number) + ", Phone Number: " + str(phone_number) + ", Hotel: " +
+                                                           available_rooms_fattal['hotel'] + ", Room: " + str(
+                                    available_rooms_fattal['room']) + ", Nights: " + str(
+                                    nights) + ", Breakfast: " + str(breakfast) + ", Price: " + str(
+                                    available_rooms_fattal['cost'] * nights + breakfast_price * nights) + "$\n"))
                                 print(Fore.LIGHTBLUE_EX + "Room: " + str(available_rooms_fattal['room']) + ", Hotel: " +
                                       available_rooms_fattal['hotel'] + ", Nights: " + str(
                                     nights) + ", Price: " + str(
-                                    available_rooms_fattal['cost'] * nights + breakfast_price * nights))
+                                    available_rooms_fattal['cost'] * nights + breakfast_price * nights) + "$")
         if hotels_preferation == 2:
             for line in open(str(temp_directory) + "/available_rooms_isrotel.txt", "r").readlines():
                 available_rooms_isrotel = line.replace("'", "\"")
@@ -429,11 +438,17 @@ def reservation():
                         if re.search(str(days_list), str(available_rooms_isrotel)):
                             reservation_file = open(str(temp_directory) + "/reservation.txt", "a+")
                             if i < rooms:
-                                reservation_file.write(str(available_rooms_isrotel) + "\n")
-                                print(Fore.LIGHTBLUE_EX + "Room: " + str(available_rooms_isrotel['room']) + ", Hotel: " +
-                                      available_rooms_isrotel['hotel'] + ", Nights: " + str(
-                                    nights) + ", Price: " + str(
-                                    available_rooms_isrotel['cost'] * nights + breakfast_price * nights))
+                                reservation_file.write(str("Full Name: " + str(full_name) + ", ID number: " + str(
+                                    identification_number) + ", Phone Number: " + str(phone_number) + ", Hotel: " +
+                                                           available_rooms_isrotel['hotel'] + ", Room: " + str(
+                                    available_rooms_isrotel['room']) + ", Nights: " + str(
+                                    nights) + ", Breakfast: " + str(breakfast) + ", Price: " + str(
+                                    available_rooms_isrotel['cost'] * nights + breakfast_price * nights) + "$\n"))
+                                print(
+                                    Fore.LIGHTBLUE_EX + "Room: " + str(available_rooms_isrotel['room']) + ", Hotel: " +
+                                    available_rooms_isrotel['hotel'] + ", Nights: " + str(
+                                        nights) + ", Price: " + str(
+                                        available_rooms_isrotel['cost'] * nights + breakfast_price * nights) + "$")
     for i in range(8):
         if hotels_preferation == 3:
             for line in open(str(temp_directory) + "/available_rooms.txt", "r").readlines():
@@ -443,8 +458,10 @@ def reservation():
                     if re.search(str(days_list), str(available_rooms)):
                         reservation_file = open(str(temp_directory) + "/reservation.txt", "a+")
                         if i < rooms:
-                            reservation_file.write(str("Full Name: " + str(full_name) + ", ID number: " + str(identification_number) + ", Phone Number: " + str(phone_number) + ", Hotel: " +
-                                  available_rooms['hotel'] + ", Room: " + str(available_rooms['room']) + ", Nights: " + str(
+                            reservation_file.write(str("Full Name: " + str(full_name) + ", ID number: " + str(
+                                identification_number) + ", Phone Number: " + str(phone_number) + ", Hotel: " +
+                                                       available_rooms['hotel'] + ", Room: " + str(
+                                available_rooms['room']) + ", Nights: " + str(
                                 nights) + ", Breakfast: " + str(breakfast) + ", Price: " + str(
                                 available_rooms['cost'] * nights + breakfast_price * nights) + "$\n"))
                             print(Fore.LIGHTBLUE_EX + "Room: " + str(available_rooms['room']) + ", Hotel: " +
@@ -452,11 +469,37 @@ def reservation():
                                 nights) + ", Price: " + str(
                                 available_rooms['cost'] * nights + breakfast_price * nights) + "$")
 
-    finish = decision()
-    if finish == 1:
-        reservation = open(str(temp_directory) + "/reservation.txt", "r+")
+    delete_reservation_from_main_hotels_file(arrival_day, departure_day, hotel_name, rooms)
+
+
+def delete_reservation_from_main_hotels_file(a,b,c,d):
+    temp_directory = tempfile.gettempdir()
+    for line in open(str(temp_directory) + "/hotels.txt", "r").readlines():
+        hotels = line.replace("'", "\"")
+        hotels = json.loads(hotels)
+        index_arrival_day = hotels['day'].index(str(a).title())
+        index_departure_day = hotels['day'].index(str(b).title())
+        if c == "Isrotel" or c == "Fattal":
+            if re.search(str(c), str(hotels)):
+                if re.search(str(d), str(hotels)):
+                    del hotels['day'][index_arrival_day:index_departure_day]
+                    print(hotels)
+        else:
+            del hotels['day'][index_arrival_day:index_departure_day]
+            print(hotels)
+
+    # finish = decision()
+    # if finish == 1:
+    #     reservation = open(str(temp_directory) + "/reservation.txt", "r+")
+
+
+# def cancel_reservation():
 
 
 files_creation()
 welcome()
 menu()
+
+# reservation file is not deleted but can change when adding/removong reservations
+# hotels file changes and not created again once it's created.
+# The filed creation only running if hotels file doesn't exist
