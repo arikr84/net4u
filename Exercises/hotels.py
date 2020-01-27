@@ -6,6 +6,7 @@ import tempfile
 import json
 import re
 import random
+import os
 
 
 def welcome():
@@ -117,13 +118,13 @@ def decision():
 def select_arrival_day(nights):
     if nights == 1:
         arrival_day = input(
-            "[Please choose day of arrival between Sunday and Wednesday]: ").lower()
+            "[Please choose day of arrival from Sunday to Wednesday]: ").lower()
     if nights == 2:
         arrival_day = input(
-            "[Please choose day of arrival between Sunday and Tuesday]: ").lower()
+            "[Please choose day of arrival from Sunday to Tuesday]: ").lower()
     if nights == 3:
         arrival_day = input(
-            "[Please choose day of arrival between Sunday and Monday]: ").lower()
+            "[Please choose day of arrival from Sunday to Monday]: ").lower()
     if nights == 4:
         arrival_day = "sunday"
         print("Sunday was selected automatically as the arrival day. The hotels rooms are available from Sunday to "
@@ -143,43 +144,43 @@ def select_departure_day(arrival_day, nights):
     if x == "sunday":
         if nights == 1:
             departure_day = "Monday"
-            print("You have chosen to stay 1 night from " + str(arrival_day).title() + " till " + str(departure_day))
+            print("You have chosen to arrive on " + str(arrival_day).title() + " and depart on " + str(departure_day) + " (1 night)")
         if nights == 2:
             departure_day = "Tuesday"
-            print("You have chosen to stay 2 nights from " + str(arrival_day).title() + " till " + str(departure_day))
+            print("You have chosen to arrive on " + str(arrival_day).title() + " and depart on " + str(departure_day) + " (2 nights)")
         if nights == 3:
             departure_day = "Wednesday"
-            print("You have chosen to stay 3 nights from " + str(arrival_day).title() + " till " + str(departure_day))
+            print("You have chosen to arrive on " + str(arrival_day).title() + " and depart on " + str(departure_day) + " (3 nights)")
         if nights == 4:
             departure_day = "Thursday"
-            print("You have chosen to stay 4 nights from " + str(arrival_day).title() + " till " + str(departure_day))
+            print("You have chosen to arrive on " + str(arrival_day).title() + " and depart on " + str(departure_day) + " (4 nights)")
         if nights > 4:
             quit("Apologies, we offer maximum of " + str(nights) + " nights from" + str(arrival_day) + ". Good-Bye.")
     if x == "monday":
         if nights == 1:
             departure_day = "Tuesday"
-            print("You have chosen to stay 1 night from " + str(arrival_day).title() + " till " + str(departure_day))
+            print("You have chosen to arrive on " + str(arrival_day).title() + " and depart on " + str(departure_day) + " (1 night)")
         if nights == 2:
             departure_day = "Wednesday"
-            print("You have chosen to stay 2 nights from " + str(arrival_day).title() + " till " + str(departure_day))
+            print("You have chosen to arrive on " + str(arrival_day).title() + " and depart on " + str(departure_day) + " (2 nights)")
         if nights == 3:
             departure_day = "Thursday"
-            print("You have chosen to stay 3 nights from " + str(arrival_day).title() + " till " + str(departure_day))
+            print("You have chosen to arrive on " + str(arrival_day).title() + " and depart on " + str(departure_day) + " (3 nights)")
         if nights > 3:
             quit("Apologies, we offer maximum of " + str(nights) + " nights from" + str(arrival_day) + ". Good-Bye.")
     if x == "tuesday":
         if nights == 1:
             departure_day = "Wednesday"
-            print("You have chosen to stay 1 night from " + str(arrival_day).title() + " till " + str(departure_day))
+            print("You have chosen to arrive on " + str(arrival_day).title() + " and depart on " + str(departure_day) + " (1 night)")
         if nights == 2:
             departure_day = "Thursday"
-            print("You have chosen to stay 2 nights from " + str(arrival_day).title() + " till " + str(departure_day))
+            print("You have chosen to arrive on " + str(arrival_day).title() + " and depart on " + str(departure_day) + " (2 nights)")
         if nights > 2:
             quit("Apologies, we offer maximum of " + str(nights) + " nights from" + str(arrival_day) + ". Good-Bye.")
     if x == "wednesday":
         if nights == 1:
             departure_day = "Thursday"
-            print("You have chosen to stay 1 night from " + str(arrival_day).title() + " till " + str(departure_day))
+            print("You have chosen to arrive on " + str(arrival_day).title() + " and depart on " + str(departure_day) + " (1 night)")
         if nights > 1:
             quit("Apologies, we can only offer 1 night from " + str(arrival_day) + ". Good-Bye.")
     if x == "thursday":
@@ -256,18 +257,18 @@ def terms_and_conditions():
             quit("Thank you for using our services. Good-Bye.")
 
 
-def presentation(a, b, c, d, e, f, g):
+def presentation(a, b, c, d, e, f, g, h, i, j):
     if e == "yes":
-        e = "The deal includes breakfast"
+        e = "Breakfast: included at a cost of " + str(j) + "$ per night."
     if e == "no":
-        e = "The deal does not includes breakfast"
-    print(Style.BRIGHT + Fore.LIGHTBLUE_EX + "\nDear " + str(g) + ", you have searched for " + str(
+        e = "Breakfast: not included."
+    print(Style.BRIGHT + Fore.LIGHTBLUE_EX + "\nDear " + str(g) + ", Phone-Number: " + str(h) + ", Identification Number: " + str(i) + ".\nYou searched for " + str(
         f) + " room(s) in " + str(d) + " for " + str(
-        a) + " guests over " + str(c) + " night(s) (" + str(b).replace("'", "") + "). " + str(e))
-    reservation_validation = input("[The above reservation details are correct? Enter (Yes/No)]: ").lower()
+        a) + " guests over " + str(c) + " night(s) (" + str(b).replace("'", "") + ").\n" + str(e))
+    reservation_validation = input("\n[The above reservation details are correct? Enter (Yes/No)]: ").lower()
     if reservation_validation == "yes":
         print(
-            Style.BRIGHT + "Searching for the cheapest rooms by your demands. The rooms prices are final.")
+            Style.BRIGHT + "\nSearching for the cheapest rooms by your demands. The rooms prices are final.")
         # sleep_loading(x=10)
     if reservation_validation == "no":
         print("Please wait few seconds while restarting the reservation process...")
@@ -366,10 +367,7 @@ def reservation():
         hotels = json.loads(hotels)
         available_rooms = open(str(temp_directory) + "/available_rooms.txt", "a+")
         if int(len(list(hotels.values())[4])) > nights:
-            if breakfast == "yes":
-                hotels['cost'] = hotels['cost'] + breakfast_price * nights
-            if breakfast == "no":
-                hotels['cost'] = hotels['cost']
+            hotels['cost'] = hotels['cost']
             available_rooms.write("{}\n".format(str(hotels)))
             costs.append(list(hotels.values())[3])
             costs = sorted(costs)
@@ -379,10 +377,7 @@ def reservation():
         hotels = line.replace("'", "\"")
         hotels = json.loads(hotels)
         available_rooms_fattal = open(str(temp_directory) + "/available_rooms_fattal.txt", "a+")
-        if breakfast == "yes":
-            hotels['cost'] = hotels['cost'] + breakfast_price * nights
-        if breakfast == "no":
-            hotels['cost'] = hotels['cost']
+        hotels['cost'] = hotels['cost']
         if re.search("Fattal", str(hotels)):
             available_rooms_fattal.write("{}\n".format(str(hotels)))
             costs_fattal.append(list(hotels.values())[3])
@@ -407,7 +402,7 @@ def reservation():
     identification_number = int(input("Please Enter your identification number: "))
     phone_number = int(input("Please Enter your phone number (e.g. 0501223334): "))
 
-    presentation(guests, days_list, nights, hotel_name, breakfast, rooms, full_name)
+    presentation(guests, days_list, nights, hotel_name, breakfast, rooms, full_name, phone_number, identification_number, breakfast_price)
 
     for i in range(4):
         if hotels_preferation == 1:
@@ -469,24 +464,55 @@ def reservation():
                                 nights) + ", Price: " + str(
                                 available_rooms['cost'] * nights + breakfast_price * nights) + "$")
 
-    delete_reservation_from_main_hotels_file(arrival_day, departure_day, hotel_name, rooms)
+    delete_reservation_from_main_hotels_file(arrival_day, departure_day, hotel_name, costs, rooms)
 
 
-def delete_reservation_from_main_hotels_file(a,b,c,d):
+def delete_reservation_from_main_hotels_file(a,b,c,d,e):
+    i = 0
     temp_directory = tempfile.gettempdir()
-    for line in open(str(temp_directory) + "/hotels.txt", "r").readlines():
+    for line in open(str(temp_directory) + "/hotels.txt", "r+").readlines():
         hotels = line.replace("'", "\"")
         hotels = json.loads(hotels)
         index_arrival_day = hotels['day'].index(str(a).title())
         index_departure_day = hotels['day'].index(str(b).title())
-        if c == "Isrotel" or c == "Fattal":
-            if re.search(str(c), str(hotels)):
-                if re.search(str(d), str(hotels)):
-                    del hotels['day'][index_arrival_day:index_departure_day]
-                    print(hotels)
-        else:
-            del hotels['day'][index_arrival_day:index_departure_day]
-            print(hotels)
+        for cost in d:
+            if c == "Fattal":
+                if re.search(str(c), str(hotels)):
+                    if re.search(str(cost), str(hotels)):
+                        if i < e:
+                            i = i + 1
+                            # line_before_deletion = hotels
+                            del hotels['day'][index_arrival_day:index_departure_day]
+                            line_after_deletion = hotels
+                            # hotels = json.dumps(hotels)
+                            # line_before_deletion = json.dumps(line_before_deletion)
+                            # line_after_deletion = json.dumps(line_after_deletion)
+                            with open(str(temp_directory) + "/hotels.txt", "a+") as f:
+                                f.write("\n" + str(line_after_deletion))
+                            # os.system('sed - i ' + line_before_deletion + '/d' + str(temp_directory) + "/hotels.txt'")
+
+            if c == "Isrotel":
+                if re.search(str(c), str(hotels)):
+                    if re.search(str(cost), str(hotels)):
+                        if i < e:
+                            i = i + 1
+                            # line_before_deletion = hotels
+                            del hotels['day'][index_arrival_day:index_departure_day]
+                            line_after_deletion = hotels
+                            # hotels = json.dumps(hotels)
+                            # line_before_deletion = json.dumps(line_before_deletion)
+                            # line_after_deletion = json.dumps(line_after_deletion)
+                            with open(str(temp_directory) + "/hotels.txt", "a") as f:
+                                f.write("\n" + str(line_after_deletion))
+                            # os.system('sed - i ' + line_before_deletion + '/d' + str(temp_directory) + "/hotels.txt'")
+            if c != "Fattal" and c != "Isrotel":
+                        if re.search(str(cost), str(hotels)):
+                            if i < e:
+                                i = i + 1
+                                print(hotels)
+                                del hotels['day'][index_arrival_day:index_departure_day]
+                                print(hotels)
+    # hotels.close()
 
     # finish = decision()
     # if finish == 1:
@@ -496,7 +522,7 @@ def delete_reservation_from_main_hotels_file(a,b,c,d):
 # def cancel_reservation():
 
 
-files_creation()
+# files_creation()
 welcome()
 menu()
 
