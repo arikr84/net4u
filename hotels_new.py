@@ -1,6 +1,4 @@
 from time import sleep
-
-import self as self
 from colorama import Fore, init, Style
 
 init(autoreset=True)
@@ -14,14 +12,14 @@ temp_directory = tempfile.gettempdir()
 breakfast_price = 20
 costs = []
 days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']
-rooms_dictionary = {1: {'Hotel': 'Isrotel', 'Room': 1, 'Guests': 2, 'Cost': random.randrange(250, 450), 'Days': days},
-                    2: {'Hotel': 'Isrotel', 'Room': 2, 'Guests': 2, 'Cost': random.randrange(250, 450), 'Days': days},
-                    3: {'Hotel': 'Isrotel', 'Room': 3, 'Guests': 3, 'Cost': random.randrange(300, 500), 'Days': days},
-                    4: {'Hotel': 'Isrotel', 'Room': 4, 'Guests': 3, 'Cost': random.randrange(300, 500), 'Days': days},
-                    5: {'Hotel': 'Fattal', 'Room': 1, 'Guests': 2, 'Cost': random.randrange(350, 550), 'Days': days},
-                    6: {'Hotel': 'Fattal', 'Room': 2, 'Guests': 2, 'Cost': random.randrange(350, 550), 'Days': days},
-                    7: {'Hotel': 'Fattal', 'Room': 3, 'Guests': 3, 'Cost': random.randrange(400, 600), 'Days': days},
-                    8: {'Hotel': 'Fattal', 'Room': 4, 'Guests': 3, 'Cost': random.randrange(400, 600), 'Days': days}}
+rooms_dictionary = {0: {'Hotel': 'Isrotel', 'Room': 1, 'Guests': 2, 'Cost': random.randrange(250, 450), 'Days': days},
+                    1: {'Hotel': 'Isrotel', 'Room': 2, 'Guests': 2, 'Cost': random.randrange(250, 450), 'Days': days},
+                    2: {'Hotel': 'Isrotel', 'Room': 3, 'Guests': 3, 'Cost': random.randrange(300, 500), 'Days': days},
+                    3: {'Hotel': 'Isrotel', 'Room': 4, 'Guests': 3, 'Cost': random.randrange(300, 500), 'Days': days},
+                    4: {'Hotel': 'Fattal', 'Room': 1, 'Guests': 2, 'Cost': random.randrange(350, 550), 'Days': days},
+                    5: {'Hotel': 'Fattal', 'Room': 2, 'Guests': 2, 'Cost': random.randrange(350, 550), 'Days': days},
+                    6: {'Hotel': 'Fattal', 'Room': 3, 'Guests': 3, 'Cost': random.randrange(400, 600), 'Days': days},
+                    7: {'Hotel': 'Fattal', 'Room': 4, 'Guests': 3, 'Cost': random.randrange(400, 600), 'Days': days}}
 
 
 def welcome():
@@ -160,7 +158,7 @@ def details_gathering_validation_and_presentation():
     # presenting all the gathered information in a nice manner
     presentation(guests, nights_count, selected_hotel, breakfast, rooms, full_name, phone_number, breakfast_price)
 
-    return selected_hotel, arrival_day, departure_day, guests, rooms, breakfast,full_name, phone_number, nights_count
+    return selected_hotel, arrival_day, departure_day, guests, rooms, breakfast, full_name, phone_number, nights_count
 
 
 def presentation(guests, nights_count, selected_hotel, breakfast, rooms, full_name, phone_number, breakfast_price):
@@ -168,7 +166,8 @@ def presentation(guests, nights_count, selected_hotel, breakfast, rooms, full_na
         breakfast = "Breakfast is included in exchange for " + str(breakfast_price) + "$ per night."
     if breakfast == "no":
         breakfast = "Breakfast is not included."
-    print(Style.BRIGHT + Fore.LIGHTBLUE_EX + "\nDear " + str(full_name) + ",\nThe phone-number you have entered is '" + str(
+    print(Style.BRIGHT + Fore.LIGHTBLUE_EX + "\nDear " + str(
+        full_name) + ",\nThe phone-number you have entered is '" + str(
         phone_number) + "'.\nYou have searched for " + str(
         rooms) + " room(s) in " + str(selected_hotel) + " for " + str(
         guests) + " guests over " + str(nights_count) + " night(s).\n" + str(breakfast))
@@ -186,16 +185,35 @@ def presentation(guests, nights_count, selected_hotel, breakfast, rooms, full_na
 def cheapest_room():
     details = read_hotels_file()
     for i in range(8):
-        i = i + 1
         costs.append(details[str(i)]['Cost'])
     low_to_high_costs_list = sorted(costs)
-    print(low_to_high_costs_list)
+    for n in low_to_high_costs_list[0:3]:
+        if re.search(str(n), str(details[str(1)])):
+            print(details)
+
+
+# def cheapest_room():
+#     x = 0
+#     details = read_hotels_file()
+#     for i in range(8):
+#         costs.append(details[str(i)]['Cost'])
+#     low_to_high_costs_list = sorted(costs)
+#     for n in low_to_high_costs_list[0:rooms]:
+#         while not re.search(str(n), str(details[str(x)])) and x < 8:
+#             x = x + 1
+#         else:
+#             print(details[str(x)])
+
+
+
+
 
 
 # main
 # welcome()
 # terms_and_conditions()
 # menu()
+
 # write_hotels_file(rooms_dictionary)
 # read_hotels_file()
 # loading()
