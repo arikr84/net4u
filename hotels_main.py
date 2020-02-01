@@ -11,11 +11,13 @@ import os.path
 
 # Hotels.rooms_file_write()
 # Hotels.available_rooms_per_day()
-Hotels.available_guests_per_day()
+# Hotels.available_guests_per_day()
 # Hotels.max_guests_capacity_per_day()
+# Hotels.available_days_list()
 
-user_input = Hotels('check_in', 'check_out', 'rooms', 'guests', 'name', 'phone')
 
+user_input = Hotels('check_in', 'check_out', 'hotel', 'rooms', 'breakfast', 'guests', 'name', 'phone')
+# Hotels.cheapest_rooms()
 
 
 # user_input = Hotels(check_in='')
