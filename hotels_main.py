@@ -9,14 +9,15 @@ from colorama import Fore, init, Style, Cursor
 import csv
 import os.path
 
-# Hotels.rooms_file_write()
+Hotels.rooms_file_write()
 # Hotels.available_rooms_per_day()
 # Hotels.available_guests_per_day()
 # Hotels.max_guests_capacity_per_day()
 # Hotels.available_days_list()
+Hotels.available_dates_list()
 
-
-user_input = Hotels('check_in', 'check_out', 'hotel', 'rooms', 'breakfast', 'guests', 'name', 'phone')
+user_input = Hotels('check_in', 'check_out', 'hotel', 'rooms', 'breakfast', 'guests', 'name', 'phone_number'
+                    , 'id_number', 'credit_card_number')
 # Hotels.cheapest_rooms()
 
 
