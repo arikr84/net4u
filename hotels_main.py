@@ -17,7 +17,7 @@ Hotels.rooms_file_write()
 Hotels.available_dates_list()
 
 user_input = Hotels('check_in', 'check_out', 'hotel', 'rooms', 'breakfast', 'guests', 'name', 'phone_number'
-                    , 'id_number', 'credit_card_number')
+                                , 'id_number', 'credit_card_number', 'email')
 # Hotels.cheapest_rooms()
 
 

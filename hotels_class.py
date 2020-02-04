@@ -19,7 +19,7 @@ site_name = 'Drivago'
 
 class Hotels:
     def __init__(self, check_in, check_out, hotel, guests, rooms, breakfast, name, phone_number, id_number,
-                 credit_card_number):
+                 credit_card_number, email):
         global selected_days_list
         selected_days_list = []
         full_dates_list = ['2.8.2020', '3.8.2020', '4.8.2020', '5.8.2020', '6.8.2020']
@@ -38,7 +38,8 @@ class Hotels:
             self.check_in = input(self.check_in + ' is not a valid check-in date. Enter a date from the following date'
                                                   '(s) ' + str(available_dates_list[0:-1]) + ': ')
         check_in_index = available_dates_list.index(self.check_in)
-        del available_dates_list[check_in_index]
+        for i in reversed(range(check_in_index + 1)):
+            del available_dates_list[i]
 
         self.check_out = input(
             'Enter check-out date from the following date(s) ' + str(available_dates_list) + ': ')
@@ -105,8 +106,8 @@ class Hotels:
         self.rooms = int(input('\nEnter how many rooms you wish to reserve: '))
         while self.rooms > self.guests:
             self.guests = int(input("You requested " + str(self.rooms) + " while you are only " + str(self.guests) +
-                                " guest(s). This is against our policy.\nPlease select number of rooms no higher"
-                                " than the number of guests: "))
+                                    " guest(s). This is against our policy.\nPlease select number of rooms no higher"
+                                    " than the number of guests: "))
         while self.rooms < 1:
             self.rooms = int(input("The number of rooms cannot be lower than 1. Please enter an acceptable number of "
                                    "rooms:"))
@@ -123,9 +124,11 @@ class Hotels:
                                        "Enter new number of rooms: "))
 
         self.breakfast = input("You wish to include breakfast in exchange for an extra " + str(
-            breakfast_price) + "$ a night for each room?. Enter 'Yes' or 'No': ").lower()
+            breakfast_price) + "$ a night for each room?. Enter" + Style.BRIGHT + " (Yes/No)" +
+                                   Style.NORMAL + ": ").lower()
         while self.breakfast != "yes" and self.breakfast != "no":
-            self.breakfast = input(self.breakfast + " is not a valid input.\nPlease enter 'Yes' or 'No': ").lower()
+            self.breakfast = input(self.breakfast + " is not a valid input.\nPlease enter" + Style.BRIGHT + " (Yes/No)" +
+                                   Style.NORMAL + ": ").lower()
 
         self.cheapest_rooms(self)
 
@@ -133,21 +136,30 @@ class Hotels:
 
         self.name = input('Enter your Full Name: ')
 
-        self.phone_number = int(input('Enter Phone Number (w/o leading zeros): '))
-        while len(str(self.phone_number)) < 9:
-            self.phone_number = int(input("The phone number is expected to be 9 or more digits (w/o leading zeros)."
-                                          " Please enter another phone number (e.g. 0501234567): "))
+        self.phone_number = input('Enter Phone Number: ')
+        while len(str(self.phone_number)) != 10:
+            self.phone_number = input("The phone number is expected to have 10 digits."
+                                      " Please enter phone number (e.g. 0501234567): ")
 
-        self.id_number = int(input('Enter Identification Number (w/o leading zeros): '))
-        while len(str(self.id_number)) < 8:
-            self.id_number = int(input("The ID number is expected to be at least 8 digits (w/o leading zeros). "
-                                       "Please enter another phone number (e.g. 39954263): "))
+        self.id_number = input('Enter Identification Number: ')
+        while len(str(self.id_number)) != 9:
+            self.id_number = input("The ID number is expected to be 9 digits. "
+                                   "Please enter another phone number (e.g. 039954263): ")
 
-        self.credit_card_number = int(input('Enter Credit Card Number (w/o leading zeros): '))
-        while len(str(self.credit_card_number)) < 15:
-            self.credit_card_number = int(input("The Credit Card number is expected to be at least 15 digits "
-                                                "(w/o leading zeros). Please enter a valid Credit Card number"
-                                                " (e.g. 435467854562123): "))
+        self.credit_card_number = input('Enter Credit Card Number: ')
+        while len(str(self.credit_card_number)) < 16 or len(str(self.credit_card_number)) > 19:
+            self.credit_card_number = input("The Credit Card number is expected to be between 16 and 19 digits."
+                                            " Please enter a valid Credit Card number (e.g. 1234567890123456): ")
+
+        self.email = input('Enter Email Address: ')
+        regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+        if re.search(regex, self.email):
+            self.email = input("Invalid Email Address."
+                               " Please enter a valid Email Address (e.g. " + str(self.hotel) +
+                               "@gmail.co.il")
+        else:
+            print("invalid")
+
         self.order_acceptance(self)
 
     @staticmethod
@@ -177,7 +189,7 @@ class Hotels:
         tuesday = 0
         wednesday = 0
         thursday = 0
-        available_days_list = []
+        available_dates_list = []
         with open(rooms_csv_file, 'r') as f:
             file = csv.reader(f)
             i = next(file)
@@ -186,29 +198,29 @@ class Hotels:
                     sunday = sunday + 1
                     if sunday > 0:
                         sunday_date = i[4]
-                    available_days_list.append(sunday_date)
+                    available_dates_list.append(sunday_date)
                 if 'available' in row[5]:
                     monday = monday + 1
                     if monday > 0:
                         monday_date = i[5]
-                    available_days_list.append(monday_date)
+                    available_dates_list.append(monday_date)
                 if 'available' in row[6]:
                     tuesday = tuesday + 1
                     if tuesday > 0:
                         tuesday_date = i[6]
-                    available_days_list.append(tuesday_date)
+                    available_dates_list.append(tuesday_date)
                 if 'available' in row[7]:
                     wednesday = wednesday + 1
                     if wednesday > 0:
                         wednesday_date = i[7]
-                    available_days_list.append(wednesday_date)
+                    available_dates_list.append(wednesday_date)
                 if 'available' in row[8]:
                     thursday = thursday + 1
                     if thursday > 0:
                         thursday_date = i[8]
-                    available_days_list.append(thursday_date)
-            available_days_list = sorted(set(available_days_list))
-            return available_days_list
+                    available_dates_list.append(thursday_date)
+            available_dates_list = sorted(set(available_dates_list))
+            return available_dates_list
 
     @staticmethod
     def rooms_file_write():
@@ -593,16 +605,16 @@ class Hotels:
                                                                           'Check In', 'Check Out', 'Hotel', 'Room',
                                                                           'Price', 'Reservation ID'])
                                         file.writerow({'Name': str(self.name), 'Phone': str(self.phone_number),
-                                                                             'ID': str(self.id_number),
-                                                                             'Credit Card': str(
-                                                                                 self.credit_card_number),
-                                                                             'Check In': str(self.check_in),
-                                                                             'Check Out': str(self.check_out),
-                                                                             'Hotel': str(row[1]).title(),
-                                                                             'Room': str(room_number[i]),
-                                                                             'Price': str(prices[i]),
-                                                                             'Reservation ID': str(
-                                                                                 random.randint(0, 999999999999))})
+                                                       'ID': str(self.id_number),
+                                                       'Credit Card': str(
+                                                           self.credit_card_number),
+                                                       'Check In': str(self.check_in),
+                                                       'Check Out': str(self.check_out),
+                                                       'Hotel': str(row[1]).title(),
+                                                       'Room': str(room_number[i]),
+                                                       'Price': str(prices[i]),
+                                                       'Reservation ID': str(
+                                                           random.randint(0, 999999999999))})
                                     repetition = repetition + 1
             for index in (indexes):
                 df.at[index, selected_days_list] = 'booked'
@@ -610,4 +622,4 @@ class Hotels:
                 # could corrupt the test.
         else:
             user_input = Hotels('check_in', 'check_out', 'hotel', 'rooms', 'breakfast', 'guests', 'name', 'phone_number'
-                                , 'id_number', 'credit_card_number')
+                                , 'id_number', 'credit_card_number', 'email')
