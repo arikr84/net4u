@@ -27,7 +27,7 @@ user_input = Hotels('check_in', 'check_out', 'hotel', 'rooms', 'breakfast', 'gue
 #     user_input.check_in = user_input.check_in
 
 
-# if user_input.check_in != 2:
+# if user_input.check_in != 2:2
 #     print(check_in)
 # else:
 #     user_input.check_in = Hotels.from_input()

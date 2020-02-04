@@ -7,6 +7,7 @@ from colorama import Fore, init, Style
 import csv
 import os
 import pandas as pd
+import json
 
 init(autoreset=True)
 
@@ -49,30 +50,39 @@ class Hotels:
 
         check_out_index = full_dates_list.index(self.check_out)
 
-        self.hotel = input(Style.BRIGHT + Fore.RED +
-                           "\nNote: " + Fore.BLACK + "In each hotel we can offer maximum of 4 rooms. To try and reserve"
-                                                     " more than 4 rooms please enter 'isrotel and fattal'" +
-                           Style.NORMAL + "\n- Enter 'Isrotel' to search for the cheapest rooms in Isrotel\n"
-                                          "- Enter 'Fattal' to search for the cheapest rooms in Fattal\n"
-                                          "- Enter 'Isrotel and Fattal' to search for the cheapest rooms from both"
-                                          " Isrotel and Fattal\n\nEnter your selection: ").lower()
-        while self.hotel != 'isrotel' and self.hotel != 'fattal' and self.hotel != 'isrotel and fattal':
-            self.hotel = input(Style.BRIGHT + str(self.hotel) + Style.NORMAL +
-                               " is not a valid input.\n- Enter 'Isrotel' to search for the cheapest rooms in Isrotel\n"
-                               "- Enter 'Fattal' to search for the cheapest rooms in Fattal\n"
-                               "- Enter 'Isrotel and Fattal' to search for the cheapest rooms from both"
-                               " Isrotel and Fattal\n\nEnter your selection: ").lower()
+        self.hotel = int(input(Style.BRIGHT + Fore.RED +
+                               "\nNote: " + Fore.BLACK + "In each hotel we can offer maximum of 4 rooms. To try and reserve"
+                                                         " more than 4 rooms please enter 'isrotel and fattal'" +
+                               Style.NORMAL + "\n- Enter (1) to search the cheapest available rooms in 'Isrotel'\n"
+                                              "- Enter (2) to search the cheapest available rooms in 'Fattal'\n"
+                                              "- Enter (3) to search the cheapest available rooms in both 'Isrotel' and"
+                                              " 'Fattal'\n\nEnter your selection: "))
+        while self.hotel != 1 and self.hotel != 2 and self.hotel != 3:
+            self.hotel = int(input(Style.BRIGHT + str(self.hotel) + Style.NORMAL +
+                                   " is not a valid input.\n- Enter (1) to search the cheapest available rooms in "
+                                   "'Isrotel'\n- Enter (2) to search the cheapest available rooms in 'Fattal'\n"
+                                   "- Enter (3) to search the cheapest available rooms in both 'Isrotel' and"
+                                   " 'Fattal'\n\nEnter your selection: "))
+        if self.hotel == 1:
+            self.hotel = "isrotel"
+        if self.hotel == 2:
+            self.hotel = "fattal"
+        if self.hotel == 3:
+            self.hotel = "isrotel and fattal"
+        print("\nYou have choose to search for available rooms in " + Style.BRIGHT + Fore.MAGENTA +
+              str(self.hotel).title())
 
         available_guests_per_day = self.available_guests_per_day(self)
+
+        if min_guests_value < 1:
+            quit("\nNo available rooms in " + str(self.hotel) + " to host more guests. Please try again later or try "
+                                                                "another hotel.")
+
         print(Style.BRIGHT + "\n\tNumber of people we can accommodate per day in " + str(
             self.hotel).title() + ":\n\t" + Fore.LIGHTBLUE_EX + Style.NORMAL +
               str(available_guests_per_day).title().replace("{", "").replace("}", "").replace("'", "") + Fore.BLACK +
               "\n\tThe maximum guests to accommodate between " + str(
             self.check_in) + " and " + str(self.check_out) + " is: " + Style.BRIGHT + Fore.RED + str(min_guests_value))
-
-        if min_guests_value < 1:
-            quit("\nNo available rooms in " + str(self.hotel) + " to host more guests. Please try again later or try "
-                                                                "another hotel.")
 
         self.guests = int(input('\nEnter how many people are you coming?: '))
         while self.guests > min_guests_value:
@@ -105,9 +115,13 @@ class Hotels:
 
         self.rooms = int(input('\nEnter how many rooms you wish to reserve: '))
         while self.rooms > self.guests:
-            self.guests = int(input("You requested " + str(self.rooms) + " while you are only " + str(self.guests) +
-                                    " guest(s). This is against our policy.\nPlease select number of rooms no higher"
-                                    " than the number of guests: "))
+            self.guests = int(input("You requested " + str(self.rooms) + " rooms for " + str(self.guests) +
+                                    " guests. Our policy claims that we can't provide more than 1 room to a single"
+                                    " person.\nPlease enter number of rooms no higher than " + str(self.guests) + ": "))
+        while self.rooms > min_rooms_value:
+            self.rooms = int(input("We currently have " + str(min_rooms_value) + " available rooms while you requested "
+                                   + str(self.rooms) + " rooms.\nPlease enter number of rooms that is equal or lower "
+                                   + str(min_rooms_value) + " to : "))
         while self.rooms < 1:
             self.rooms = int(input("The number of rooms cannot be lower than 1. Please enter an acceptable number of "
                                    "rooms:"))
@@ -125,10 +139,11 @@ class Hotels:
 
         self.breakfast = input("You wish to include breakfast in exchange for an extra " + str(
             breakfast_price) + "$ a night for each room?. Enter" + Style.BRIGHT + " (Yes/No)" +
-                                   Style.NORMAL + ": ").lower()
+                               Style.NORMAL + ": ").lower()
         while self.breakfast != "yes" and self.breakfast != "no":
-            self.breakfast = input(self.breakfast + " is not a valid input.\nPlease enter" + Style.BRIGHT + " (Yes/No)" +
-                                   Style.NORMAL + ": ").lower()
+            self.breakfast = input(
+                self.breakfast + " is not a valid input.\nPlease enter" + Style.BRIGHT + " (Yes/No)" +
+                Style.NORMAL + ": ").lower()
 
         self.cheapest_rooms(self)
 
@@ -153,12 +168,9 @@ class Hotels:
 
         self.email = input('Enter Email Address: ')
         regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
-        if re.search(regex, self.email):
-            self.email = input("Invalid Email Address."
-                               " Please enter a valid Email Address (e.g. " + str(self.hotel) +
-                               "@gmail.co.il")
-        else:
-            print("invalid")
+        if not re.search(regex, self.email):
+            self.email = input(str(self.email) + " is not a valid Email address."
+                               " Please enter a valid Email address (e.g. myname@gmail.co.il): ")
 
         self.order_acceptance(self)
 
@@ -272,7 +284,7 @@ class Hotels:
                 file = csv.DictWriter(csvfile,
                                       fieldnames=['Name', 'Phone', 'ID', 'Credit Card',
                                                   'Check In', 'Check Out', 'Hotel', 'Room',
-                                                  'Price', 'Reservation ID'])
+                                                  'Price', 'Reservation ID', 'Email'])
                 file.writeheader()
                 print(str(reservation_file) + ' created')
 
@@ -455,6 +467,7 @@ class Hotels:
                                       " |  Room Guests Maximum Capacity: " + row[2], " |  Price: " + prices[n] + "$")
                                 room_number.append(row[1])
 
+
                     else:
                         if prices[n] in row[3] and 'available' in row[4]:
                             if self.breakfast == 'yes':
@@ -564,7 +577,7 @@ class Hotels:
         if order_acceptance == 1:
             print("Thank you for choosing " + site_name + ". Please wait few seconds while we redirect you to the "
                                                           "reservation process")
-            self.loading(sec=10)
+            self.loading(sec=5)
             df = pd.read_csv(rooms_csv_file)
 
             if self.hotel == 'isrotel' or self.hotel == 'fattal':
@@ -579,7 +592,7 @@ class Hotels:
                                             file = csv.DictWriter(csvfile,
                                                                   fieldnames=['Name', 'Phone', 'ID', 'Credit Card',
                                                                               'Check In', 'Check Out', 'Hotel', 'Room',
-                                                                              'Price', 'Reservation ID'])
+                                                                              'Price', 'Reservation ID', 'Email'])
                                             file.writerow({'Name': str(self.name), 'Phone': str(self.phone_number),
                                                            'ID': str(self.id_number),
                                                            'Credit Card': str(
@@ -590,7 +603,8 @@ class Hotels:
                                                            'Room': str(room_number[i]),
                                                            'Price': str(prices[i]),
                                                            'Reservation ID': str(
-                                                               random.randint(0, 999999999999))})
+                                                               random.randint(0, 999999999999)),
+                                                           'Email': str(self.email)})
                                         repetition = repetition + 1
             else:
                 for i in range(self.rooms):
@@ -603,7 +617,7 @@ class Hotels:
                                         file = csv.DictWriter(csvfile,
                                                               fieldnames=['Name', 'Phone', 'ID', 'Credit Card',
                                                                           'Check In', 'Check Out', 'Hotel', 'Room',
-                                                                          'Price', 'Reservation ID'])
+                                                                          'Price', 'Reservation ID', 'Email'])
                                         file.writerow({'Name': str(self.name), 'Phone': str(self.phone_number),
                                                        'ID': str(self.id_number),
                                                        'Credit Card': str(
@@ -614,12 +628,24 @@ class Hotels:
                                                        'Room': str(room_number[i]),
                                                        'Price': str(prices[i]),
                                                        'Reservation ID': str(
-                                                           random.randint(0, 999999999999))})
+                                                           random.randint(0, 999999999999)),
+                                                       'Email': str(self.email)})
                                     repetition = repetition + 1
             for index in (indexes):
                 df.at[index, selected_days_list] = 'booked'
                 df.to_csv(rooms_csv_file, index=False)  # index=False so index column will be added to the file which
                 # could corrupt the test.
+                total_cost = sum([int(i) for i in prices if type(i) == int or i.isdigit()])
+                summary = {'Name': str(self.name), 'Phone': str(self.phone_number), 'ID': str(self.id_number),
+                           'Credit Card': str(self.credit_card_number), 'Email': str(self.email),
+                           'Check In': str(self.check_in),
+                           'Check Out': str(self.check_out), 'Hotels': str(self.hotel), 'Rooms': str(self.rooms),
+                           'Guests': str(self.guests), 'Price': str(total_cost) + "$"}
+                print(json.dumps(summary, indent=4, sort_keys=True))
+
         else:
             user_input = Hotels('check_in', 'check_out', 'hotel', 'rooms', 'breakfast', 'guests', 'name', 'phone_number'
                                 , 'id_number', 'credit_card_number', 'email')
+
+
+
