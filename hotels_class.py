@@ -22,6 +22,8 @@ class Hotels:
     def __init__(self, check_in, check_out, hotel, guests, rooms, breakfast, name, phone_number, id_number,
                  credit_card_number, email):
         global selected_days_list
+        global full_days_list
+        global real_check_in_index
         selected_days_list = []
         full_dates_list = ['2.8.2020', '3.8.2020', '4.8.2020', '5.8.2020', '6.8.2020']
         full_days_list = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']
@@ -42,6 +44,8 @@ class Hotels:
         for i in reversed(range(check_in_index + 1)):
             del available_dates_list[i]
 
+        real_check_in_index = full_dates_list.index(self.check_in)
+
         self.check_out = input(
             'Enter check-out date from the following date(s) ' + str(available_dates_list) + ': ')
         while self.check_out not in available_dates_list:
@@ -49,10 +53,12 @@ class Hotels:
                 available_dates_list) + ': ')
 
         check_out_index = full_dates_list.index(self.check_out)
+        selected_days_list = full_dates_list[check_in_index:check_out_index + 1]
+
 
         self.hotel = int(input(Style.BRIGHT + Fore.RED +
                                "\nNote: " + Fore.BLACK + "In each hotel we can offer maximum of 4 rooms. To try and reserve"
-                                                         " more than 4 rooms please enter 'isrotel and fattal'" +
+                                                         " more than 4 rooms please enter option '3' (Isrotel and Fattal))" +
                                Style.NORMAL + "\n- Enter (1) to search the cheapest available rooms in 'Isrotel'\n"
                                               "- Enter (2) to search the cheapest available rooms in 'Fattal'\n"
                                               "- Enter (3) to search the cheapest available rooms in both 'Isrotel' and"
@@ -94,14 +100,11 @@ class Hotels:
             self.guests = int(input("The number of guests cannot be lower than 1. Please enter an acceptable number "
                                     "of guests:"))
 
-        selected_days_index_list = list(range(check_in_index, check_out_index + 1))
-
-        for n in selected_days_index_list:
-            selected_days_list.append(full_dates_list[n])
-            while list(available_guests_per_day.values())[n] < self.guests:
+        for n in list(available_guests_per_day.values()):
+            while n < self.guests:
                 self.guests = int(input("On " + full_days_list[n] + " (" + full_dates_list[n] +
-                                        ") we can only accommodate maximum of " + str(
-                    list(available_guests_per_day.values())[n]) +
+                                        ") we can only accommodate maximum of " +
+                                        str(list(available_guests_per_day.values())[n]) +
                                         " guests while you requested to host " + str(self.guests) +
                                         " guests.\nPlease change the amount of guests accordingly.\n"
                                         "Enter new number of guests: "))
@@ -129,13 +132,13 @@ class Hotels:
             self.rooms = int(input("Can't have more than 3 people in 1 room. You will need to reserve more rooms. "
                                    "Please enter how many rooms you wish to reserve: "))
 
-        for n in selected_days_index_list:
-            while list(available_rooms_per_day.values())[n] < self.rooms:
-                self.rooms = int(input("We offer " + str(list(available_rooms_per_day.values())[n]) +
-                                       " rooms on " + full_days_list[n] + " (" + full_dates_list[n] + ") in " +
-                                       str(self.hotel).title() + " while you requested " + str(self.guests) +
-                                       " rooms.\nPlease change the amount of rooms accordingly.\n"
-                                       "Enter new number of rooms: "))
+        # for n in selected_days_index_list:
+        #     while list(available_rooms_per_day.values())[n] < self.rooms:
+        #         self.rooms = int(input("We offer " + str(list(available_rooms_per_day.values())[n]) +
+        #                                " rooms on " + full_days_list[n] + " (" + full_dates_list[n] + ") in " +
+        #                                str(self.hotel).title() + " while you requested " + str(self.guests) +
+        #                                " rooms.\nPlease change the amount of rooms accordingly.\n"
+        #                                "Enter new number of rooms: "))
 
         self.breakfast = input("You wish to include breakfast in exchange for an extra " + str(
             breakfast_price) + "$ a night for each room?. Enter" + Style.BRIGHT + " (Yes/No)" +
@@ -170,7 +173,7 @@ class Hotels:
         regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
         if not re.search(regex, self.email):
             self.email = input(str(self.email) + " is not a valid Email address."
-                               " Please enter a valid Email address (e.g. myname@gmail.co.il): ")
+                                                 " Please enter a valid Email address (e.g. myname@gmail.co.il): ")
 
         self.order_acceptance(self)
 
@@ -351,17 +354,35 @@ class Hotels:
                     if 'available' in row[8]:
                         thursday = thursday + 1
 
-        days_rooms_dict['sunday'] = sunday
-        days_rooms_dict['monday'] = monday
-        days_rooms_dict['tuesday'] = tuesday
-        days_rooms_dict['wednesday'] = wednesday
-        days_rooms_dict['thursday'] = thursday
-        min_rooms_value = min(days_rooms_dict.values())
+        if sunday == 0:
+            del days_rooms_dict["sunday"]
+        else:
+            days_rooms_dict['sunday'] = sunday
+        if monday == 0:
+            del days_rooms_dict["monday"]
+        else:
+            days_rooms_dict['monday'] = monday
+        if tuesday == 0:
+            del days_rooms_dict["tuesday"]
+        else:
+            days_rooms_dict['tuesday'] = tuesday
+        if wednesday == 0:
+            del days_rooms_dict["wednesday"]
+        else:
+            days_rooms_dict['wednesday'] = wednesday
+        if thursday == 0:
+            del days_rooms_dict["thursday"]
+        else:
+            days_rooms_dict['thursday'] = thursday
+
+        min_rooms_value = min(i for i in days_rooms_dict.values() if i > 0)
+
         return days_rooms_dict
 
     @staticmethod
     def available_guests_per_day(self):
         global min_guests_value
+        global days_guests_dict
         sunday = 0
         monday = 0
         tuesday = 0
@@ -422,12 +443,29 @@ class Hotels:
                     if 'available' in row[8]:
                         thursday = thursday + int(row[2])
 
-        days_guests_dict['sunday'] = sunday
-        days_guests_dict['monday'] = monday
-        days_guests_dict['tuesday'] = tuesday
-        days_guests_dict['wednesday'] = wednesday
-        days_guests_dict['thursday'] = thursday
-        min_guests_value = min(days_guests_dict.values())
+            if sunday == 0:
+                del days_guests_dict["sunday"]
+            else:
+                days_guests_dict['sunday'] = sunday
+            if monday == 0:
+                del days_guests_dict["monday"]
+            else:
+                days_guests_dict['monday'] = monday
+            if tuesday == 0:
+                del days_guests_dict["tuesday"]
+            else:
+                days_guests_dict['tuesday'] = tuesday
+            if wednesday == 0:
+                del days_guests_dict["wednesday"]
+            else:
+                days_guests_dict['wednesday'] = wednesday
+            if thursday == 0:
+                del days_guests_dict["thursday"]
+            else:
+                days_guests_dict['thursday'] = thursday
+
+            min_guests_value = min(i for i in days_guests_dict.values() if i > 0)
+
         return days_guests_dict
 
     @staticmethod
@@ -439,14 +477,16 @@ class Hotels:
         repetition = 0
         with open(rooms_csv_file, 'r') as f:
             file = csv.reader(f)
+            next(file, None)
             for row in file:
                 if self.hotel == 'isrotel' or self.hotel == 'fattal':
-                    if 'available' in row[4] and str(self.hotel).title() in row[0]:
+                    if 'available' in row[real_check_in_index + 4] and str(self.hotel).title() in row[0]:
                         prices.append(row[3])
-                if self.hotel != 'isrotel' and self.hotel != 'fattal':
-                    if 'available' in row[4]:
+                if self.hotel == 'isrotel and fattal':
+                    if 'available' in row[real_check_in_index + 4]:
                         prices.append(row[3])
             prices = sorted(prices[:self.rooms])
+            print(prices)
 
             print("\nThe following are the cheapest " + str(
                 self.rooms) + " rooms we could find in " + self.hotel.title() + ":\n" + str('-' * 64))
@@ -456,7 +496,7 @@ class Hotels:
                 file = csv.reader(f)
                 for row in file:
                     if self.hotel == 'isrotel' or self.hotel == 'fattal':
-                        if prices[n] in row[3] and 'available' in row[4] and str(self.hotel).title() in row[0]:
+                        if prices[n] in row[3] and 'available' in row[real_check_in_index + 4] and str(self.hotel).title() in row[0]:
                             if self.breakfast == 'yes':
                                 print(Fore.LIGHTBLUE_EX + "Hotel: " + row[0], " |  Room: " + row[1],
                                       " |  Room Guests Maximum Capacity: " + row[2], " |  Price: " +
@@ -467,9 +507,8 @@ class Hotels:
                                       " |  Room Guests Maximum Capacity: " + row[2], " |  Price: " + prices[n] + "$")
                                 room_number.append(row[1])
 
-
                     else:
-                        if prices[n] in row[3] and 'available' in row[4]:
+                        if prices[n] in row[3] and 'available' in row[real_check_in_index + 4]:
                             if self.breakfast == 'yes':
                                 if repetition < self.rooms:
                                     print(Fore.LIGHTBLUE_EX + "Hotel: " + row[0], " |  Room: " + row[1],
@@ -631,21 +670,20 @@ class Hotels:
                                                            random.randint(0, 999999999999)),
                                                        'Email': str(self.email)})
                                     repetition = repetition + 1
-            for index in (indexes):
+
+            for index in indexes:
                 df.at[index, selected_days_list] = 'booked'
                 df.to_csv(rooms_csv_file, index=False)  # index=False so index column will be added to the file which
                 # could corrupt the test.
-                total_cost = sum([int(i) for i in prices if type(i) == int or i.isdigit()])
-                summary = {'Name': str(self.name), 'Phone': str(self.phone_number), 'ID': str(self.id_number),
-                           'Credit Card': str(self.credit_card_number), 'Email': str(self.email),
-                           'Check In': str(self.check_in),
-                           'Check Out': str(self.check_out), 'Hotels': str(self.hotel), 'Rooms': str(self.rooms),
-                           'Guests': str(self.guests), 'Price': str(total_cost) + "$"}
-                print(json.dumps(summary, indent=4, sort_keys=True))
+            total_cost = sum([int(i) for i in prices if type(i) == int or i.isdigit()])
+            summary = {'Name': str(self.name), 'Phone': str(self.phone_number), 'ID': str(self.id_number),
+                       'Credit Card': str(self.credit_card_number), 'Email': str(self.email),
+                       'Check In': str(self.check_in),
+                       'Check Out': str(self.check_out), 'Hotels': str(self.hotel), 'Rooms': str(self.rooms),
+                       'Guests': str(self.guests), 'Price': str(total_cost) + "$"}
+
+            print(json.dumps(summary, indent=4, sort_keys=True))
 
         else:
             user_input = Hotels('check_in', 'check_out', 'hotel', 'rooms', 'breakfast', 'guests', 'name', 'phone_number'
                                 , 'id_number', 'credit_card_number', 'email')
-
-
-

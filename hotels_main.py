@@ -16,8 +16,15 @@ Hotels.rooms_file_write()
 # Hotels.available_days_list()
 Hotels.available_dates_list()
 
-user_input = Hotels('check_in', 'check_out', 'hotel', 'rooms', 'breakfast', 'guests', 'name', 'phone_number'
-                                , 'id_number', 'credit_card_number', 'email')
+
+def welcome():
+    print(Fore.MAGENTA + Style.BRIGHT + "\nDrivago - The Best Rooms For the Best Prices!")
+    sleep(0.5)
+    user_input = Hotels('check_in', 'check_out', 'hotel', 'rooms', 'breakfast', 'guests', 'name', 'phone_number'
+                        , 'id_number', 'credit_card_number', 'email')
+
+
+welcome()
 # Hotels.cheapest_rooms()
 
 
